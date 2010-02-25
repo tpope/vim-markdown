@@ -20,7 +20,7 @@ syn match markdownValid '&\%(#\=\w*;\)\@!'
 syn match markdownLineStart "^[<@]\@!" nextgroup=@markdownBlock
 
 syn cluster markdownBlock contains=markdownH1,markdownH2,markdownH3,markdownH4,markdownH5,markdownH6,markdownBlockquote,markdownListMarker,markdownOrderedListMarker,markdownCodeBlock,markdownRule
-syn cluster markdownInline contains=markdownLinkText,markdownItalic,markdownBold,markdownCode,markdownEscape,@htmlTop
+syn cluster markdownInline contains=markdownLineBreak,markdownLinkText,markdownItalic,markdownBold,markdownCode,markdownEscape,@htmlTop
 
 syn match markdownH1 ".\+\n=\+$" contained contains=@markdownInline,markdownHeadingRule
 syn match markdownH2 ".\+\n-\+$" contained contains=@markdownInline,markdownHeadingRule
@@ -46,6 +46,8 @@ syn match markdownRule "\* *\* *\*[ *]*$" contained
 syn match markdownRule "- *- *-[ -]*$" contained
 
 syn region markdownYamlHead start="\%^---$" end="^---\s*$" keepend contains=@markdownYamlTop
+
+syn match markdownLineBreak "\s\{2,\}$"
 
 syn region markdownIdDeclaration matchgroup=markdownLinkDelimiter start="^\s\{0,2\}!\=\[" end="\]:" oneline keepend nextgroup=markdownUrl skipwhite
 syn match markdownUrl "\S\+" nextgroup=markdownUrlTitle skipwhite contained
