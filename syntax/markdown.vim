@@ -49,7 +49,7 @@ syn region markdownYamlHead start="\%^---$" end="^---\s*$" keepend contains=@mar
 
 syn match markdownLineBreak "\s\{2,\}$"
 
-syn region markdownIdDeclaration matchgroup=markdownLinkDelimiter start="^\s\{0,2\}!\=\[" end="\]:" oneline keepend nextgroup=markdownUrl skipwhite
+syn region markdownIdDeclaration matchgroup=markdownLinkDelimiter start="^ \{0,2\}!\=\[" end="\]:" oneline keepend nextgroup=markdownUrl skipwhite
 syn match markdownUrl "\S\+" nextgroup=markdownUrlTitle skipwhite contained
 syn region markdownUrl matchgroup=markdownUrlDelimiter start="<" end=">" oneline keepend nextgroup=markdownUrlTitle skipwhite contained
 syn region markdownUrlTitle matchgroup=markdownUrlTitleDelimiter start=+"+ end=+"+ keepend contained
