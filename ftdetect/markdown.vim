@@ -1,4 +1,4 @@
 augroup markdown
   autocmd!
-  autocmd BufNewFile,BufRead *.markdown,*.mkdn,*.mdown,*.md set ft=markdown
+  autocmd BufNewFile,BufRead *.markdown,*.md,*.mdown,*.mkd,*.mkdn set ft=markdown
 augroup END
