@@ -9,7 +9,6 @@ endif
 
 runtime! syntax/html.vim
 unlet! b:current_syntax
-syn include @markdownYamlTop syntax/yaml.vim
 
 syn sync minlines=10
 syn case ignore
@@ -44,8 +43,6 @@ syn match markdownOrderedListMarker " \{0,4}\<\d\+\.\%(\s*\S\)\@=" contained
 
 syn match markdownRule "\* *\* *\*[ *]*$" contained
 syn match markdownRule "- *- *-[ -]*$" contained
-
-syn region markdownYamlHead start="\%^---$" end="^---\s*$" keepend contains=@markdownYamlTop
 
 syn match markdownLineBreak "\s\{2,\}$"
 
