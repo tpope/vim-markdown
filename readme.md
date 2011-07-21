@@ -1,6 +1,8 @@
 This project adds [Markdown] support to the vim editor. It handles syntax,
 indenting, and compiling.
 
+[Markdown]: http://daringfireball.net/projects/markdown
+
 ### Installing
 
 ```bash
