@@ -69,6 +69,7 @@ syn region markdownCode matchgroup=markdownCodeDelimiter start="`` \=" end=" \=`
 syn region markdownCode matchgroup=markdownCodeDelimiter start="^\s*\zs```\w*\ze\s*$" end="^```\ze\s*$" keepend
 
 syn match markdownEscape "\\[][\\`*_{}()#+.!-]"
+syn match markdownError "\w\@<=_\w\@="
 
 hi def link markdownH1                    htmlH1
 hi def link markdownH2                    htmlH2
@@ -99,6 +100,7 @@ hi def link markdownBoldItalic            htmlBoldItalic
 hi def link markdownCodeDelimiter         Delimiter
 
 hi def link markdownEscape                Special
+hi def link markdownError                 Error
 
 let b:current_syntax = "markdown"
 
