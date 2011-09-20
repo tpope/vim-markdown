@@ -13,6 +13,11 @@ setlocal comments=fb:*,fb:-,fb:+,n:> commentstring=>\ %s
 setlocal formatoptions+=tcqln
 setlocal formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\|^[-*+]\\s\\+
 
-let b:undo_ftplugin .= "|setl cms< com< fo<"
+if exists("b:undo_ftplugin") 
+  let b:undo_ftplugin .= "|setl cms< com< fo<"
+else
+  let b:undo_ftplugin = "setl cms< com< fo<"
+endif
 
+let b:did_ftplugin = 1
 " vim:set sw=2:
