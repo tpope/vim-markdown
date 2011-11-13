@@ -21,8 +21,8 @@ syn match markdownLineStart "^[<@]\@!" nextgroup=@markdownBlock
 syn cluster markdownBlock contains=markdownH1,markdownH2,markdownH3,markdownH4,markdownH5,markdownH6,markdownBlockquote,markdownListMarker,markdownOrderedListMarker,markdownCodeBlock,markdownRule
 syn cluster markdownInline contains=markdownLineBreak,markdownLinkText,markdownItalic,markdownBold,markdownCode,markdownEscape,@htmlTop
 
-syn match markdownH1 ".\+\n=\+$" contained contains=@markdownInline,markdownHeadingRule
-syn match markdownH2 ".\+\n-\+$" contained contains=@markdownInline,markdownHeadingRule
+syn match markdownH1 "^.\+\n=\+$" contained contains=@markdownInline,markdownHeadingRule
+syn match markdownH2 "^.\+\n-\+$" contained contains=@markdownInline,markdownHeadingRule
 
 syn match markdownHeadingRule "^[=-]\+$" contained
 
