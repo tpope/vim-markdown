@@ -52,7 +52,6 @@ syn match markdownOrderedListMarker " \{0,4}\<\d\+\.\%(\s*\S\)\@=" contained
 
 if has('conceal') && &encoding == 'utf-8'
   syntax match markdownPrettyListMarker /[-*+]/ conceal cchar=• contained containedin=markdownListMarker
-  highlight Conceal guibg=bg
 endif
 
 syn match markdownRule "\* *\* *\*[ *]*$" contained
@@ -119,6 +118,20 @@ endif
 
 syn match markdownEscape "\\[][\\`*_{}()#+.!-]"
 syn match markdownError "\w\@<=_\w\@="
+
+if has('conceal')
+
+  " There's no equivalent for these without the conceal feature.
+  syntax match markdownLessThan /&lt;/ conceal cchar=<
+  syntax match markdownGreaterThan /&gt;/ conceal cchar=>
+  syntax match markdownAmpersand /&amp;/ conceal cchar=&
+
+  " The trick above looks really crappy by default because of the default
+  " styling for "concealed" characters. Instead we want it to look like
+  " regular text:
+  highlight Conceal guifg=fg guibg=bg
+
+endif
 
 hi def link markdownH1                    htmlH1
 hi def link markdownH2                    htmlH2
