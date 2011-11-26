@@ -50,6 +50,11 @@ syn region markdownCodeBlock start="    \|\t" end="$" contained
 syn match markdownListMarker " \{0,4\}[-*+]\%(\s\+\S\)\@=" contained
 syn match markdownOrderedListMarker " \{0,4}\<\d\+\.\%(\s*\S\)\@=" contained
 
+if has('conceal') && &encoding == 'utf-8'
+  syntax match markdownPrettyListMarker /[-*+]/ conceal cchar=• contained containedin=markdownListMarker
+  highlight Conceal guibg=bg
+endif
+
 syn match markdownRule "\* *\* *\*[ *]*$" contained
 syn match markdownRule "- *- *-[ -]*$" contained
 
