@@ -10,6 +10,18 @@ endif
 runtime! syntax/html.vim
 unlet! b:current_syntax
 
+" Let the user determine which markers to conceal and which not to conceal:
+"   #: headings, *: bullets, d: id declarations, l: links, a: automatic links,
+"   i: italic text, b: bold text, B: bold and italic text, c: code fragments,
+"   e: common HTML entities
+if !has("conceal")
+  let s:markdown_conceal = ''
+elseif !exists("g:markdown_conceal")
+  let s:markdown_conceal = '#*dlaibBce'
+else
+  let s:markdown_conceal = g:markdown_conceal
+endif
+
 syn sync minlines=10
 syn case ignore
 
@@ -26,7 +38,7 @@ syn match markdownH2 "^.\+\n-\+$" contained contains=@markdownInline,markdownHea
 
 syn match markdownHeadingRule "^[=-]\+$" contained
 
-if has('conceal')
+if s:markdown_conceal =~ '#'
   syn region markdownH1 matchgroup=markdownHeadingDelimiter start="##\@!\s*"      end="#*\s*$" keepend oneline contains=@markdownInline contained concealends
   syn region markdownH2 matchgroup=markdownHeadingDelimiter start="###\@!\s*"     end="#*\s*$" keepend oneline contains=@markdownInline contained concealends
   syn region markdownH3 matchgroup=markdownHeadingDelimiter start="####\@!\s*"    end="#*\s*$" keepend oneline contains=@markdownInline contained concealends
@@ -50,7 +62,7 @@ syn region markdownCodeBlock start="    \|\t" end="$" contained
 syn match markdownListMarker " \{0,4\}[-*+]\%(\s\+\S\)\@=" contained
 syn match markdownOrderedListMarker " \{0,4}\<\d\+\.\%(\s*\S\)\@=" contained
 
-if has('conceal') && &encoding == 'utf-8'
+if &encoding == 'utf-8' && s:markdown_conceal =~ '*'
   syntax match markdownPrettyListMarker /[-*+]/ conceal cchar=• contained containedin=markdownListMarker
 endif
 
@@ -59,7 +71,7 @@ syn match markdownRule "- *- *-[ -]*$" contained
 
 syn match markdownLineBreak "\s\{2,\}$"
 
-if has('conceal')
+if s:markdown_conceal =~# 'd'
   syn region markdownIdDeclaration matchgroup=markdownLinkDelimiter start="^ \{0,3\}!\=\[" end="\]\ze:" oneline keepend nextgroup=markdownUrl skipwhite concealends
 else
   syn region markdownIdDeclaration matchgroup=markdownLinkDelimiter start="^ \{0,3\}!\=\[" end="\]:" oneline keepend nextgroup=markdownUrl skipwhite
@@ -71,7 +83,7 @@ syn region markdownUrlTitle matchgroup=markdownUrlTitleDelimiter start=+"+ end=+
 syn region markdownUrlTitle matchgroup=markdownUrlTitleDelimiter start=+'+ end=+'+ keepend contained
 syn region markdownUrlTitle matchgroup=markdownUrlTitleDelimiter start=+(+ end=+)+ keepend contained
 
-if has('conceal')
+if s:markdown_conceal =~# 'l'
   syn region markdownLinkText matchgroup=markdownLinkTextDelimiter start="!\=\[\%(\_[^]]*]\%( \=[[(]\)\)\@=" end="\]\%( \=[[(]\)\@=" keepend nextgroup=markdownLink,markdownId skipwhite contains=@markdownInline,markdownLineStart concealends
   syn region markdownLink matchgroup=markdownLinkDelimiter start="(" end=")" contains=markdownUrl keepend contained conceal
   syn region markdownId matchgroup=markdownIdDelimiter start="\s*\[" end="\]" keepend contained conceal
@@ -81,13 +93,13 @@ else
   syn region markdownId matchgroup=markdownIdDelimiter start="\[" end="\]" keepend contained
 endif
 
-if has('conceal')
+if s:markdown_conceal =~# 'a'
   syn region markdownAutomaticLink matchgroup=markdownUrlDelimiter start="<\%(\w\+:\|[[:alnum:]_+-]\+@\)\@=" end=">" keepend oneline concealends
 else
   syn region markdownAutomaticLink matchgroup=markdownUrlDelimiter start="<\%(\w\+:\|[[:alnum:]_+-]\+@\)\@=" end=">" keepend oneline
 endif
 
-if has('conceal')
+if s:markdown_conceal =~# 'i'
   syn region markdownItalic matchgroup=markdownItalicDelimiter start="\S\@<=\*\|\*\S\@=" end="\S\@<=\*\|\*\S\@=" keepend contains=markdownLineStart concealends
   syn region markdownItalic matchgroup=markdownItalicDelimiter start="\S\@<=_\|_\S\@=" end="\S\@<=_\|_\S\@=" keepend contains=markdownLineStart concealends
 else
@@ -95,7 +107,7 @@ else
   syn region markdownItalic start="\S\@<=_\|_\S\@=" end="\S\@<=_\|_\S\@=" keepend contains=markdownLineStart
 endif
 
-if has('conceal')
+if s:markdown_conceal =~# 'b'
   syn region markdownBold matchgroup=markdownBolDelimiter start="\S\@<=\*\*\|\*\*\S\@=" end="\S\@<=\*\*\|\*\*\S\@=" keepend contains=markdownLineStart concealends
   syn region markdownBold matchgroup=markdownBolDelimiter start="\S\@<=__\|__\S\@=" end="\S\@<=__\|__\S\@=" keepend contains=markdownLineStart concealends
 else
@@ -103,7 +115,7 @@ else
   syn region markdownBold start="\S\@<=__\|__\S\@=" end="\S\@<=__\|__\S\@=" keepend contains=markdownLineStart
 endif
 
-if has('conceal')
+if s:markdown_conceal =~# 'B'
   syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\S\@<=\*\*\*\|\*\*\*\S\@=" end="\S\@<=\*\*\*\|\*\*\*\S\@=" keepend contains=markdownLineStart concealends
   syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\S\@<=___\|___\S\@=" end="\S\@<=___\|___\S\@=" keepend contains=markdownLineStart concealends
 else
@@ -111,7 +123,7 @@ else
   syn region markdownBoldItalic start="\S\@<=___\|___\S\@=" end="\S\@<=___\|___\S\@=" keepend contains=markdownLineStart
 endif
 
-if has('conceal')
+if s:markdown_conceal =~# 'c'
   syn region markdownCode matchgroup=markdownCodeDelimiter start="`" end="`" keepend contains=markdownLineStart concealends
   syn region markdownCode matchgroup=markdownCodeDelimiter start="`` \=" end=" \=``" keepend contains=markdownLineStart concealends
   syn region markdownCode matchgroup=markdownCodeDelimiter start="^\s*\zs```\s*\w*\ze\s*$" end="^```\ze\s*$" keepend concealends
@@ -124,18 +136,18 @@ endif
 syn match markdownEscape "\\[][\\`*_{}()#+.!-]"
 syn match markdownError "\w\@<=_\w\@="
 
-if has('conceal')
-
+if s:markdown_conceal =~# 'e'
   " There's no equivalent for these without the conceal feature.
   syntax match markdownLessThan /&lt;/ conceal cchar=<
   syntax match markdownGreaterThan /&gt;/ conceal cchar=>
   syntax match markdownAmpersand /&amp;/ conceal cchar=&
+endif
 
-  " The trick above looks really crappy by default because of the default
-  " styling for "concealed" characters. Instead we want it to look like
-  " regular text:
+if s:markdown_conceal =~# '[*e]'
+  " The "conceal cchar=..." characters look really crappy by default because
+  " of the default styling for "concealed" characters. We just want it to look
+  " like regular text:
   highlight Conceal guifg=fg guibg=bg
-
 endif
 
 hi def link markdownH1                    htmlH1
