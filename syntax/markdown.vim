@@ -96,9 +96,15 @@ else
   syn region markdownBoldItalic start="\S\@<=___\|___\S\@=" end="\S\@<=___\|___\S\@=" keepend contains=markdownLineStart
 endif
 
-syn region markdownCode matchgroup=markdownCodeDelimiter start="`" end="`" keepend contains=markdownLineStart
-syn region markdownCode matchgroup=markdownCodeDelimiter start="`` \=" end=" \=``" keepend contains=markdownLineStart
-syn region markdownCode matchgroup=markdownCodeDelimiter start="^\s*\zs```\s*\w*\ze\s*$" end="^```\ze\s*$" keepend
+if has('conceal')
+  syn region markdownCode matchgroup=markdownCodeDelimiter start="`" end="`" keepend contains=markdownLineStart concealends
+  syn region markdownCode matchgroup=markdownCodeDelimiter start="`` \=" end=" \=``" keepend contains=markdownLineStart concealends
+  syn region markdownCode matchgroup=markdownCodeDelimiter start="^\s*\zs```\s*\w*\ze\s*$" end="^```\ze\s*$" keepend concealends
+else
+  syn region markdownCode matchgroup=markdownCodeDelimiter start="`" end="`" keepend contains=markdownLineStart
+  syn region markdownCode matchgroup=markdownCodeDelimiter start="`` \=" end=" \=``" keepend contains=markdownLineStart
+  syn region markdownCode matchgroup=markdownCodeDelimiter start="^\s*\zs```\s*\w*\ze\s*$" end="^```\ze\s*$" keepend
+endif
 
 syn match markdownEscape "\\[][\\`*_{}()#+.!-]"
 syn match markdownError "\w\@<=_\w\@="
