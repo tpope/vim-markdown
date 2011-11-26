@@ -59,7 +59,12 @@ syn match markdownRule "- *- *-[ -]*$" contained
 
 syn match markdownLineBreak "\s\{2,\}$"
 
-syn region markdownIdDeclaration matchgroup=markdownLinkDelimiter start="^ \{0,3\}!\=\[" end="\]:" oneline keepend nextgroup=markdownUrl skipwhite
+if has('conceal')
+  syn region markdownIdDeclaration matchgroup=markdownLinkDelimiter start="^ \{0,3\}!\=\[" end="\]\ze:" oneline keepend nextgroup=markdownUrl skipwhite concealends
+else
+  syn region markdownIdDeclaration matchgroup=markdownLinkDelimiter start="^ \{0,3\}!\=\[" end="\]:" oneline keepend nextgroup=markdownUrl skipwhite
+endif
+
 syn match markdownUrl "\S\+" nextgroup=markdownUrlTitle skipwhite contained
 syn region markdownUrl matchgroup=markdownUrlDelimiter start="<" end=">" oneline keepend nextgroup=markdownUrlTitle skipwhite contained
 syn region markdownUrlTitle matchgroup=markdownUrlTitleDelimiter start=+"+ end=+"+ keepend contained
