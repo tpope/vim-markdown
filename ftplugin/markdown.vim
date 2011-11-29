@@ -14,4 +14,32 @@ setlocal formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\|^[-*+]\\s\\+
 
 let b:undo_ftplugin .= "|setl cms< com< fo<"
 
+if has("folding") && exists("g:markdown_folding")
+  setlocal foldexpr=MarkdownFold()
+  setlocal foldmethod=expr
+  let b:undo_ftplugin .= " foldexpr< foldmethod<"
+
+  function! MarkdownFold()
+    let line = getline(v:lnum)
+
+    " Regular headers
+    let depth = match(line, '\(^#\+\)\@<=\( .*$\)\@=')
+    if depth > 0
+      return ">" . depth
+    endif
+
+    " Setext style headings
+    let nextline = getline(v:lnum + 1)
+    if (line =~ '^.\+$') && (nextline =~ '^=\+$')
+      return ">1"
+    endif
+
+    if (line =~ '^.\+$') && (nextline =~ '^-\+$')
+      return ">2"
+    endif
+
+    return "="
+  endfunction
+endif
+
 " vim:set sw=2:
