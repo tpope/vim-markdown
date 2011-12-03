@@ -13,11 +13,11 @@ unlet! b:current_syntax
 " Let the user determine which markers to conceal and which not to conceal:
 "   #: headings, *: bullets, d: id declarations, l: links, a: automatic links,
 "   i: italic text, b: bold text, B: bold and italic text, c: code fragments,
-"   e: common HTML entities
+"   e: common HTML entities, s: escapes
 if !has("conceal")
   let s:markdown_conceal = ''
 elseif !exists("g:markdown_conceal")
-  let s:markdown_conceal = '#*dlaibBce'
+  let s:markdown_conceal = '#*dlaibBces'
 else
   let s:markdown_conceal = g:markdown_conceal
 endif
@@ -134,6 +134,10 @@ else
 endif
 
 syn match markdownEscape "\\[][\\`*_{}()#+.!-]"
+if s:markdown_conceal =~# 's'
+  syn match markdownEscapeMarker "\\" contained containedin=markdownEscape conceal
+endif
+
 syn match markdownError "\w\@<=_\w\@="
 
 if s:markdown_conceal =~# 'e'
