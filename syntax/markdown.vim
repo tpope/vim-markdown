@@ -22,6 +22,9 @@ else
   let s:markdown_conceal = g:markdown_conceal
 endif
 
+" Decide whether to render list bullets as a proper bullet character.
+let s:conceal_bullets = (&encoding == 'utf-8' && s:markdown_conceal =~ '*')
+
 syn sync minlines=10
 syn case ignore
 
@@ -62,7 +65,7 @@ syn region markdownCodeBlock start="    \|\t" end="$" contained
 syn match markdownListMarker " \{0,4\}[-*+]\%(\s\+\S\)\@=" contained
 syn match markdownOrderedListMarker " \{0,4}\<\d\+\.\%(\s*\S\)\@=" contained
 
-if &encoding == 'utf-8' && s:markdown_conceal =~ '*'
+if s:conceal_bullets
   syntax match markdownPrettyListMarker /[-*+]/ conceal cchar=• contained containedin=markdownListMarker
 endif
 
@@ -148,10 +151,10 @@ if s:markdown_conceal =~# 'e'
 endif
 
 if s:markdown_conceal =~# '[*e]'
-  " The "conceal cchar=..." characters look really crappy by default because
-  " of the default styling for "concealed" characters. We just want it to look
-  " like regular text:
-  highlight Conceal guifg=fg guibg=bg
+  " The "conceal cchar=..." characters (list bullets and HTML entities) look
+  " really crappy by default because of the default styling for "concealed"
+  " characters. We want it to look more or less like regular text:
+  hi link Conceal htmlTagName
 endif
 
 hi def link markdownH1                    htmlH1
@@ -184,6 +187,16 @@ hi def link markdownCodeDelimiter         Delimiter
 
 hi def link markdownEscape                Special
 hi def link markdownError                 Error
+
+if s:conceal_bullets
+  hi def link markdownPrettyListMarker markdownListMarker
+endif
+
+if s:markdown_conceal =~# 'e'
+  hi def link markdownLessThan markdownListMarker
+  hi def link markdownGreaterThan markdownListMarker
+  hi def link markdownAmpersand markdownListMarker
+endif
 
 let b:current_syntax = "markdown"
 
