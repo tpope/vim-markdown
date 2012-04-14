@@ -58,8 +58,15 @@ syn region markdownLink matchgroup=markdownLinkDelimiter start="(" end=")" conta
 syn region markdownId matchgroup=markdownIdDelimiter start="\[" end="\]" keepend contained
 syn region markdownAutomaticLink matchgroup=markdownUrlDelimiter start="<\%(\w\+:\|[[:alnum:]_+-]\+@\)\@=" end=">" keepend oneline
 
-syn region markdownItalic start="\S\@<=\*\|\*\S\@=" end="\S\@<=\*\|\*\S\@=" keepend contains=markdownLineStart
-syn region markdownItalic start="\S\@<=_\|_\S\@=" end="\S\@<=_\|_\S\@=" keepend contains=markdownLineStart
+" Explanation of italics pattern when token is '_':
+"   match start on '_' that is:
+"   * followed by a non-space character
+"   * NOT followed by two newline chars (separated by any non-newline whitespace) that are
+"   preceded by:
+"     * all non-'_' characters OR
+"     * an '_' that is ignored for ending italics ('_' preceded by whitespace)
+syn region markdownItalic start="\*\S\@=\(\(\_[^*]\|\_\s\*\)\{-}\n\s*\n\)\@!" end="\S\@<=\*" skip="\\\*" keepend contains=markdownLineStart
+syn region markdownItalic start="_\S\@=\(\(\_[^_]\|\_\s_\)\{-}\n\s*\n\)\@!" end="\S\@<=_" skip="\\_" keepend contains=markdownLineStart
 syn region markdownBold start="\S\@<=\*\*\|\*\*\S\@=" end="\S\@<=\*\*\|\*\*\S\@=" keepend contains=markdownLineStart
 syn region markdownBold start="\S\@<=__\|__\S\@=" end="\S\@<=__\|__\S\@=" keepend contains=markdownLineStart
 syn region markdownBoldItalic start="\S\@<=\*\*\*\|\*\*\*\S\@=" end="\S\@<=\*\*\*\|\*\*\*\S\@=" keepend contains=markdownLineStart
