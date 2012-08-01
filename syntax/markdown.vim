@@ -58,6 +58,10 @@ syn region markdownLink matchgroup=markdownLinkDelimiter start="(" end=")" conta
 syn region markdownId matchgroup=markdownIdDelimiter start="\[" end="\]" keepend contained
 syn region markdownAutomaticLink matchgroup=markdownUrlDelimiter start="<\%(\w\+:\|[[:alnum:]_+-]\+@\)\@=" end=">" keepend oneline
 
+syn region markdownFn matchgroup=markdownFnDelimiter start="^\[^"rs=e-1 end="\]:" nextgroup=markdownFnText contains=markdownFnId skipwhite oneline
+syn match markdownFnId "\^[^]]\{-1,\}" contained 
+syn match markdownFnText "\s*\(\n*\( {4}\|\t\)\|.*\)\+" contains=@markdownInline,@markdownBlock contained
+
 syn region markdownItalic start="\S\@<=\*\|\*\S\@=" end="\S\@<=\*\|\*\S\@=" keepend contains=markdownLineStart
 syn region markdownItalic start="\S\@<=_\|_\S\@=" end="\S\@<=_\|_\S\@=" keepend contains=markdownLineStart
 syn region markdownBold start="\S\@<=\*\*\|\*\*\S\@=" end="\S\@<=\*\*\|\*\*\S\@=" keepend contains=markdownLineStart
@@ -93,6 +97,10 @@ hi def link markdownUrlTitle              String
 hi def link markdownIdDelimiter           markdownLinkDelimiter
 hi def link markdownUrlDelimiter          htmlTag
 hi def link markdownUrlTitleDelimiter     Delimiter
+
+hi def link markdownFnId                  Type
+hi def link markdownFnIdDelimiter         markdownLinkDelimiter
+hi def link markdownFnText                Comment
 
 hi def link markdownItalic                htmlItalic
 hi def link markdownBold                  htmlBold
