@@ -76,8 +76,8 @@ for s:lang in g:markdown_gfm_languages
   let s:lang_name = matchstr(s:lang, "^[^=]*")
   let s:lang_syntax = matchstr(s:lang, "[^=]*$")
 
-  exe "syn include @highlight_code_block_" . s:lang_syntax . " syntax/" . s:lang_syntax . ".vim"
-  exe "syn region markdownCode_" . s:lang_syntax . ' matchgroup=markdownCodeDelimiter start="^\s*\zs```' . s:lang_name . '$" end="^```\ze\s*$" keepend contains=@highlight_code_block_' . s:lang_syntax
+  exe "syn include @markdownCode_" . s:lang_syntax . " syntax/" . s:lang_syntax . ".vim"
+  exe "syn region markdownCode_" . s:lang_syntax . ' matchgroup=markdownCodeDelimiter start="^\s*\zs```' . s:lang_name . '$" end="^```\ze\s*$" keepend contains=@markdownCode_' . s:lang_syntax
   unlet! b:current_syntax
 endfor
 unlet! s:lang s:lang_name s:lang_syntax
