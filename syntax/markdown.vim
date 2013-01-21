@@ -29,7 +29,7 @@ unlet! s:type
 syn sync minlines=10
 syn case ignore
 
-syn match markdownValid '[<>]\S\@!'
+syn match markdownValid '[<>]\c[a-z/$!]\@!'
 syn match markdownValid '&\%(#\=\w*;\)\@!'
 
 syn match markdownLineStart "^[<@]\@!" nextgroup=@markdownBlock
