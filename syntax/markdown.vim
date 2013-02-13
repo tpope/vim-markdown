@@ -89,9 +89,9 @@ exe 'syn region markdownBold matchgroup=markdownBoldDelimiter start="\S\@<=__\|_
 exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\S\@<=\*\*\*\|\*\*\*\S\@=" end="\S\@<=\*\*\*\|\*\*\*\S\@=" keepend contains=markdownLineStart' . s:concealends
 exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\S\@<=___\|___\S\@=" end="\S\@<=___\|___\S\@=" keepend contains=markdownLineStart' . s:concealends
 
-syn region CMAdd start="\S\@<={++\|{++\S\@=" end="\S\@<=++}\|++}\S\@=" keepend contains=markdownLineStart
-syn region CMDelete start="\S\@<={--\|{--\S\@=" end="\S\@<=--}\|--}\S\@=" keepend contains=markdownLineStart
-syn region CMSubstitute start="\S\@<={\~\~\|{\~\~\S\@=" end="\S\@<=\~\~}\|\~\~}\S\@=" keepend contains=markdownLineStart
+syn region CMAdd start="\S\@<={++\|{++" end="++}\|++}\S\@=" keepend contains=markdownLineStart
+syn region CMDelete start="\S\@<={--\|{--" end="--}\|--}\S\@=" keepend contains=markdownLineStart
+syn region CMSubstitute start="\S\@<={\~\~\|{\~\~" end="\~\~}\|\~\~}\S\@=" keepend contains=markdownLineStart
 
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`" end="`" keepend contains=markdownLineStart
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`` \=" end=" \=``" keepend contains=markdownLineStart
