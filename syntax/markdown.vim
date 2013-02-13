@@ -42,7 +42,7 @@ syn match markdownValid '&\%(#\=\w*;\)\@!'
 syn match markdownLineStart "^[<@]\@!" nextgroup=@markdownBlock,htmlSpecialChar
 
 syn cluster markdownBlock contains=markdownH1,markdownH2,markdownH3,markdownH4,markdownH5,markdownH6,markdownBlockquote,markdownListMarker,markdownOrderedListMarker,markdownCodeBlock,markdownRule
-syn cluster markdownInline contains=markdownLineBreak,markdownLinkText,markdownItalic,markdownBold,markdownCode,markdownEscape,@htmlTop,markdownError,CMAdd,CMDelete,CMSubstitute
+syn cluster markdownInline contains=markdownLineBreak,markdownLinkText,markdownItalic,markdownBold,markdownCode,markdownEscape,@htmlTop,markdownError,CMAdd,CMDelete,CMSubstitute,CMHighlight,CMComment
 
 syn match markdownH1 "^.\+\n=\+$" contained contains=@markdownInline,markdownHeadingRule,markdownAutomaticLink
 syn match markdownH2 "^.\+\n-\+$" contained contains=@markdownInline,markdownHeadingRule,markdownAutomaticLink
@@ -92,6 +92,8 @@ exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start=
 syn region CMAdd start="\S\@<={++\|{++" end="++}\|++}\S\@=" keepend contains=markdownLineStart
 syn region CMDelete start="\S\@<={--\|{--" end="--}\|--}\S\@=" keepend contains=markdownLineStart
 syn region CMSubstitute start="\S\@<={\~\~\|{\~\~" end="\~\~}\|\~\~}\S\@=" keepend contains=markdownLineStart
+syn region CMHighlight start="\S\@<={{\|{{" end="}}\|}}\S\@=" keepend contains=markdownLineStart
+syn region CMComment start="\S\@<={>>\|{>>" end="<<}\|<<}\S\@=" keepend contains=markdownLineStart
 
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`" end="`" keepend contains=markdownLineStart
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`` \=" end=" \=``" keepend contains=markdownLineStart
@@ -116,12 +118,17 @@ endif
 syn match markdownEscape "\\[][\\`*_{}()<>#+.!-]"
 syn match markdownError "\w\@<=_\w\@="
 
-hi CMAdd        guifg=Green
-hi CMDelete     guifg=Red
-hi CMSubstitute guifg=Yellow
+hi CMAdd        gui=bold guifg=LimeGreen cterm=bold ctermfg=Green
+hi CMDelete     gui=bold guifg=Red       cterm=bold ctermfg=Red
+hi CMSubstitute gui=bold guifg=goldenrod    cterm=bold ctermfg=Yellow
+hi CMHighlight  gui=bold guifg=Magenta   cterm=bold ctermfg=Magenta
+hi CMComment    gui=bold guifg=DodgerBlue1      cterm=bold ctermfg=Cyan
+
 hi def link CMAdd                         CMAdd
 hi def link CMDelete                      CMDelete
 hi def link CMSubstitute                  CMSubstitute
+hi def link CMHighlight                   CMHighlight
+hi def link CMComment                     CMComment
 
 hi def link markdownH1                    htmlH1
 hi def link markdownH2                    htmlH2
