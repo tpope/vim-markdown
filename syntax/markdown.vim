@@ -80,6 +80,8 @@ syn region markdownBold start="\S\@<=\*\*\|\*\*\S\@=" end="\S\@<=\*\*\|\*\*\S\@=
 syn region markdownBold start="\S\@<=__\|__\S\@=" end="\S\@<=__\|__\S\@=" keepend contains=markdownLineStart
 syn region markdownBoldItalic start="\S\@<=\*\*\*\|\*\*\*\S\@=" end="\S\@<=\*\*\*\|\*\*\*\S\@=" keepend contains=markdownLineStart
 syn region markdownBoldItalic start="\S\@<=___\|___\S\@=" end="\S\@<=___\|___\S\@=" keepend contains=markdownLineStart
+syn region markdownStrikethrough start="\S\@<=\~\~\|\~\~\S\@=" end="\S\@<=\~\~\|\~\~\S\@=" keepend contains=markdownLineStart
+
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`" end="`" keepend contains=markdownLineStart
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`` \=" end=" \=``" keepend contains=markdownLineStart
 syn region markdownCode matchgroup=markdownCodeDelimiter start="^\s*\zs```.*$" end="^```\ze\s*$" keepend
@@ -120,6 +122,8 @@ hi def link markdownUrlTitleDelimiter     Delimiter
 hi def link markdownItalic                htmlItalic
 hi def link markdownBold                  htmlBold
 hi def link markdownBoldItalic            htmlBoldItalic
+hi def link markdownStrikethrough         Comment
+
 hi def link markdownCodeDelimiter         Delimiter
 
 hi def link markdownEscape                Special
