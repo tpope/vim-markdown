@@ -116,6 +116,7 @@ exe 'syn region markdownBold matchgroup=markdownBoldDelimiter start="\*\*\S\@=" 
 exe 'syn region markdownBold matchgroup=markdownBoldDelimiter start="\w\@<!__\S\@=" end="\S\@<=__\w\@!\|^$" skip="\\_" contains=markdownLineStart,markdownItalic,@Spell' . s:concealends
 exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\*\*\*\S\@=" end="\S\@<=\*\*\*\|^$" skip="\\\*" contains=markdownLineStart,@Spell' . s:concealends
 exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\w\@<!___\S\@=" end="\S\@<=___\w\@!\|^$" skip="\\_" contains=markdownLineStart,@Spell' . s:concealends
+exe 'syn region markdownStrikethrough matchgroup=markdownStrikethroughDelimiter start="\S\@<=\~\~\|\~\~\S\@=" end="\S\@<=\~\~\|\~\~\S\@=" contains=markdownLineStart,@Spell' . s:concealends
 
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`" end="`" keepend contains=markdownLineStart
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`` \=" end=" \=``" keepend contains=markdownLineStart
@@ -142,48 +143,51 @@ endif
 syn match markdownEscape "\\[][\\`*_{}()<>#+.!-]"
 syn match markdownError "\w\@<=_\w\@="
 
-hi def link markdownH1                    htmlH1
-hi def link markdownH2                    htmlH2
-hi def link markdownH3                    htmlH3
-hi def link markdownH4                    htmlH4
-hi def link markdownH5                    htmlH5
-hi def link markdownH6                    htmlH6
-hi def link markdownHeadingRule           markdownRule
-hi def link markdownH1Delimiter           markdownHeadingDelimiter
-hi def link markdownH2Delimiter           markdownHeadingDelimiter
-hi def link markdownH3Delimiter           markdownHeadingDelimiter
-hi def link markdownH4Delimiter           markdownHeadingDelimiter
-hi def link markdownH5Delimiter           markdownHeadingDelimiter
-hi def link markdownH6Delimiter           markdownHeadingDelimiter
-hi def link markdownHeadingDelimiter      Delimiter
-hi def link markdownOrderedListMarker     markdownListMarker
-hi def link markdownListMarker            htmlTagName
-hi def link markdownBlockquote            Comment
-hi def link markdownRule                  PreProc
+hi def link markdownH1                     htmlH1
+hi def link markdownH2                     htmlH2
+hi def link markdownH3                     htmlH3
+hi def link markdownH4                     htmlH4
+hi def link markdownH5                     htmlH5
+hi def link markdownH6                     htmlH6
+hi def link markdownHeadingRule            markdownRule
+hi def link markdownH1Delimiter            markdownHeadingDelimiter
+hi def link markdownH2Delimiter            markdownHeadingDelimiter
+hi def link markdownH3Delimiter            markdownHeadingDelimiter
+hi def link markdownH4Delimiter            markdownHeadingDelimiter
+hi def link markdownH5Delimiter            markdownHeadingDelimiter
+hi def link markdownH6Delimiter            markdownHeadingDelimiter
+hi def link markdownHeadingDelimiter       Delimiter
+hi def link markdownOrderedListMarker      markdownListMarker
+hi def link markdownListMarker             htmlTagName
+hi def link markdownBlockquote             Comment
+hi def link markdownRule                   PreProc
 
-hi def link markdownFootnote              Typedef
-hi def link markdownFootnoteDefinition    Typedef
+hi def link markdownFootnote               Typedef
+hi def link markdownFootnoteDefinition     Typedef
 
-hi def link markdownLinkText              htmlLink
-hi def link markdownIdDeclaration         Typedef
-hi def link markdownId                    Type
-hi def link markdownAutomaticLink         markdownUrl
-hi def link markdownUrl                   Float
-hi def link markdownUrlTitle              String
-hi def link markdownIdDelimiter           markdownLinkDelimiter
-hi def link markdownUrlDelimiter          htmlTag
-hi def link markdownUrlTitleDelimiter     Delimiter
+hi def link markdownLinkText               htmlLink
+hi def link markdownIdDeclaration          Typedef
+hi def link markdownId                     Type
+hi def link markdownAutomaticLink          markdownUrl
+hi def link markdownUrl                    Float
+hi def link markdownUrlTitle               String
+hi def link markdownIdDelimiter            markdownLinkDelimiter
+hi def link markdownUrlDelimiter           htmlTag
+hi def link markdownUrlTitleDelimiter      Delimiter
 
-hi def link markdownItalic                htmlItalic
-hi def link markdownItalicDelimiter       markdownItalic
-hi def link markdownBold                  htmlBold
-hi def link markdownBoldDelimiter         markdownBold
-hi def link markdownBoldItalic            htmlBoldItalic
-hi def link markdownBoldItalicDelimiter   markdownBoldItalic
-hi def link markdownCodeDelimiter         Delimiter
+hi def link markdownItalic                 htmlItalic
+hi def link markdownItalicDelimiter        markdownItalic
+hi def link markdownBold                   htmlBold
+hi def link markdownBoldDelimiter          markdownBold
+hi def link markdownBoldItalic             htmlBoldItalic
+hi def link markdownBoldItalicDelimiter    markdownBoldItalic
+hi def link markdownStrikethrough          Comment
+hi def link markdownStrikethroughDelimiter Comment
 
-hi def link markdownEscape                Special
-hi def link markdownError                 Error
+hi def link markdownCodeDelimiter          Delimiter
+
+hi def link markdownEscape                 Special
+hi def link markdownError                  Error
 
 let b:current_syntax = "markdown"
 if main_syntax ==# 'markdown'
