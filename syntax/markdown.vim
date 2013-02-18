@@ -92,7 +92,7 @@ exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start=
 syn region CMAdd start="\S\@<={++\|{++" end="++}\|++}\S\@=" keepend contains=markdownLineStart
 syn region CMDelete start="\S\@<={--\|{--" end="--}\|--}\S\@=" keepend contains=markdownLineStart
 syn region CMSubstitute start="\S\@<={\~\~\|{\~\~" end="\~\~}\|\~\~}\S\@=" keepend contains=markdownLineStart
-syn region CMHighlight start="\S\@<={{\|{{" end="}}\|}}\S\@=" keepend contains=markdownLineStart
+syn region CMHighlight start="\S\@<={==\|{==" end="==}\|==}\S\@=" keepend contains=markdownLineStart
 syn region CMComment start="\S\@<={>>\|{>>" end="<<}\|<<}\S\@=" keepend contains=markdownLineStart
 
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`" end="`" keepend contains=markdownLineStart
