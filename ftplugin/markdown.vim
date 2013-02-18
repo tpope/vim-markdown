@@ -47,4 +47,11 @@ if has("folding") && exists("g:markdown_folding")
   let b:undo_ftplugin .= " foldexpr< foldmethod<"
 endif
 
+" Surround.vim bindings - install surround.vim first
+let b:surround_43 = "{++\r++}" " +
+let b:surround_45 = "{--\r--}" " -
+let b:surround_104 = "{==\r==}{>>\1comment: \1<<}" " h
+let b:surround_99 = "{>>\r<<}" " c
+let b:surround_126 = "{~~\r->\1substitution: \1~~}" " ~
+
 " vim:set sw=2:
