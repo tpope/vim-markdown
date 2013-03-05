@@ -49,7 +49,7 @@ syn region markdownH4 matchgroup=markdownHeadingDelimiter start="#####\@!"   end
 syn region markdownH5 matchgroup=markdownHeadingDelimiter start="######\@!"  end="#*\s*$" keepend oneline contains=@markdownInline,markdownAutomaticLink contained
 syn region markdownH6 matchgroup=markdownHeadingDelimiter start="#######\@!" end="#*\s*$" keepend oneline contains=@markdownInline,markdownAutomaticLink contained
 
-syn match markdownBlockquote ">\s" contained nextgroup=@markdownBlock
+syn match markdownBlockquote ">\%(\s\|$\)" contained nextgroup=@markdownBlock
 
 syn region markdownCodeBlock start="    \|\t" end="$" contained
 
