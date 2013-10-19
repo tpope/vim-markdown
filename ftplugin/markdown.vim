@@ -18,4 +18,58 @@ else
   let b:undo_ftplugin = "setl cms< com< fo< flp<"
 endif
 
+" Markdown auto lists
+function! AutoMDList()
+  let line=getline('.')
+
+  " Potential unordered list match
+  let umatches=matchstr(line, '^-')
+
+  " Potential ordered list match
+  let omatches=matchstr(line, '^\d\+\.')
+
+  if empty(umatches) && empty(omatches)
+    " TODO: Handle the case where a list item spans over several lines.
+    "
+    " In that case, a new list item needs to be added.
+    "
+    " I don't know (yet) how to do this without going up a line in a loop and
+    " checking if it's the first line of the list item (that is a terrible
+    " solution!!)
+
+    " If the user is not in a list, use the default behaviour for <CR>
+    call feedkeys("\<CR>", "n")
+  elseif empty(omatches)
+    " The case of an unordered list
+
+    if !empty(matchstr(line, '^-\s\?$'))
+      " If the user is on a blank list item (i.e.: "- ") and presses <CR>, end
+      " the list...
+      exec ':normal! cc' | call feedkeys("\<CR>", "n")
+    else
+      " ...otherwise add a list item
+      exec ':normal! o- ' | exec ':startinsert!'
+    endif
+  elseif empty(umatches)
+    " The case of an ordered list
+
+    if !empty(matchstr(line, '^\d\+\.\s\?$'))
+      " If the user is on a blank list item (i.e.: "42. ") and presses <CR>,
+      " end the list...
+      exec ':normal! cc' | call feedkeys("\<CR>", "n")
+    else
+      " ...otherwise, increment the list item number...
+      let l:nln=omatches + 1
+
+      " ...and add a new item
+      exec ':normal! o' . l:nln . '. ' | exec ':startinsert!'
+    endif
+  endif
+
+  return
+endf
+
+" Remap <CR> for all .md files
+au BufEnter *.md inoremap <buffer> <CR> <C-o>:call AutoMDList()<CR>
+
 " vim:set sw=2:
