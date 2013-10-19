@@ -23,7 +23,7 @@ function! AutoMDList()
   let line=getline('.')
 
   " Potential unordered list match
-  let umatches=matchstr(line, '^[*-]')
+  let umatches=matchstr(line, '^[*+-]')
 
   " Potential ordered list match
   let omatches=matchstr(line, '^\d\+\.')
@@ -42,18 +42,14 @@ function! AutoMDList()
   elseif empty(omatches)
     " The case of an unordered list
 
-    if !empty(matchstr(line, '^[*-]\s\?$'))
+    if !empty(matchstr(line, '^[*+-]\s\?$'))
       " If the user is on a blank list item (i.e.: "- ") and presses <CR>, end
       " the list...
       exec ':normal! cc' | call feedkeys("\<CR>", "n")
     else
       " ...otherwise add a list item
 
-      if !empty(matchstr(line, '^-\s.*'))
-        exec ':normal! o- ' | exec ':startinsert!'
-      elseif !empty(matchstr(line, '^\*\s.*'))
-        exec ':normal! o* ' | exec ':startinsert!'
-      endif
+      exec ':normal! o' . umatches . ' ' | exec ':startinsert!'
     endif
   elseif empty(umatches)
     " The case of an ordered list
