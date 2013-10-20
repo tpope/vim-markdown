@@ -19,6 +19,8 @@ else
 endif
 
 " Markdown auto lists
+" BUG: If the cursor is on a list item at `col('$') - 1`, then a new list item
+"      will be added on a new line instead of splitting the line
 function! AutoMDList()
   let line=getline('.')
 
@@ -46,10 +48,15 @@ function! AutoMDList()
       " If the user is on a blank list item (i.e.: "- ") and presses <CR>, end
       " the list...
       exec ':normal! cc' | call feedkeys("\<CR>", "n")
-    else
-      " ...otherwise add a list item
+    elseif col('.') == len(getline('.'))
+      " ...otherwise, if the cursor is at the end of the line, add a list
+      "    item...
 
       exec ':normal! o' . umatches . ' ' | exec ':startinsert!'
+    else
+      " ...and if the cursor is in the middle of a line, use the default
+      " behaviour for <CR>
+      call feedkeys("\<CR>", "n")
     endif
   elseif empty(umatches)
     " The case of an ordered list
@@ -58,12 +65,16 @@ function! AutoMDList()
       " If the user is on a blank list item (i.e.: "42. ") and presses <CR>,
       " end the list...
       exec ':normal! cc' | call feedkeys("\<CR>", "n")
-    else
-      " ...otherwise, increment the list item number...
+    elseif col('.') == len(getline('.'))
+      " ...otherwise, if the cursor is at the end of the line, increment the list item number...
       let l:nln=omatches + 1
 
       " ...and add a new item
       exec ':normal! o' . l:nln . '. ' | exec ':startinsert!'
+    else
+      " ...and if the cursor is in the middle of a line, use the default
+      " behaviour for <CR>
+      call feedkeys("\<CR>", "n")
     endif
   endif
 
