@@ -84,6 +84,7 @@ syn region markdownBoldItalic start="\S\@<=___\|___\S\@=" end="\S\@<=___\|___\S\
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`" end="`" keepend contains=markdownLineStart
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`` \=" end=" \=``" keepend contains=markdownLineStart
 syn region markdownCode matchgroup=markdownCodeDelimiter start="^\s*```.*$" end="^\s*```\ze\s*$" keepend
+syn region markdownCode matchgroup=markdownCodeDelimiter start=/{[%{].*[}%]}/ end="{%\s*endhighlight\s*%}" keepend
 
 syn match markdownFootnote "\[^[^\]]\]\s*$"
 syn match markdownFootnoteDefinition "^\[^[^\]]\]:"
