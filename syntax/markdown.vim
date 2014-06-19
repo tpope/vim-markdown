@@ -85,7 +85,7 @@ syn region markdownCode matchgroup=markdownCodeDelimiter start="`" end="`" keepe
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`` \=" end=" \=``" keepend contains=markdownLineStart
 syn region markdownCode matchgroup=markdownCodeDelimiter start="^\s*```.*$" end="^\s*```\ze\s*$" keepend
 
-syn match markdownFootnote "\[^[^\]]\+\]\s*$"
+syn match markdownFootnote "\[^[^\]]\+\]"
 syn match markdownFootnoteDefinition "^\[^[^\]]\+\]:"
 
 if main_syntax ==# 'markdown'
