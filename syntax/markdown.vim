@@ -98,6 +98,7 @@ if main_syntax ==# 'markdown'
 endif
 
 syn match markdownEscape "\\[][\\`*_{}()#+.!-]"
+syn match markdownImplicitBreak "\s*\ \ $" containedin=ALL
 syn match markdownError "\w\@<=_\w\@="
 
 hi def link markdownH1                    htmlH1
@@ -135,6 +136,7 @@ hi def link markdownBoldItalicDelimiter   markdownBoldItalic
 hi def link markdownCodeDelimiter         Delimiter
 
 hi def link markdownEscape                Special
+hi def      markdownImplicitBreak         ctermbg=darkgreen guibg=lightgreen
 hi def link markdownError                 Error
 
 let b:current_syntax = "markdown"
