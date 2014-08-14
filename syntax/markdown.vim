@@ -70,7 +70,7 @@ syn region markdownUrlTitle matchgroup=markdownUrlTitleDelimiter start=+"+ end=+
 syn region markdownUrlTitle matchgroup=markdownUrlTitleDelimiter start=+'+ end=+'+ keepend contained
 syn region markdownUrlTitle matchgroup=markdownUrlTitleDelimiter start=+(+ end=+)+ keepend contained
 
-syn region markdownLinkText matchgroup=markdownLinkTextDelimiter start="!\=\[\ze\%([^]]\|\n\s*\S\@=\)*] \=[[(]" end="]" nextgroup=markdownLink,markdownId skipwhite contains=@markdownInline,markdownLineStart
+syn region markdownLinkText matchgroup=markdownLinkTextDelimiter start="!\=\[\ze\%([^]]\|\n\%(>\s\=\)*\s*[^> \t]\@=\)*] \=[[(]" end="]" nextgroup=markdownLink,markdownId skipwhite contains=@markdownInline,markdownLineStart
 syn region markdownLink matchgroup=markdownLinkDelimiter start="(" end=")" contains=markdownUrl keepend contained
 syn region markdownId matchgroup=markdownIdDelimiter start="\[" end="\]" keepend contained
 syn region markdownAutomaticLink matchgroup=markdownUrlDelimiter start="<\%(\w\+:\|[[:alnum:]_+-]\+@\)\@=" end=">" keepend oneline
@@ -79,7 +79,7 @@ let s:concealends = has('conceal') ? 'concealends' : ''
 function! s:InlineRegionPatterns(start, end)
   " generate a new start pattern that matches the given start, followed by
   " the end after some text, without any blank lines in between.
-  let l:start = '\%(' . a:start . '\)\ze\%(.\|\n\s*\S\@=\)\{-}\%(' . a:end . '\)'
+  let l:start = '\%(' . a:start . '\)\ze\%(.\|\n\%(>\s\=\)*\s*[^> \t]\@=\)\{-}\%(' . a:end . '\)'
   " assume that the '"' character can be used as a delimiter
   return 'start="' . l:start . '" end="' . a:end . '"'
 endfunction
