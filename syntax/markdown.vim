@@ -90,18 +90,23 @@ exe 'syn region markdownBold matchgroup=markdownBoldDelimiter' s:InlineRegionPat
 exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter' s:InlineRegionPatterns('\S\@<=\*\*\*\|\*\*\*\S\@=', '\S\@<=\*\*\*\|\*\*\*\S\@=') 'keepend contains=markdownLineStart' s:concealends
 exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter' s:InlineRegionPatterns('\S\@<=___\|___\S\@=', '\S\@<=___\|___\S\@=') 'keepend contains=markdownLineStart' s:concealends
 
-exe 'syn region markdownCode matchgroup=markdownCodeDelimiter' s:InlineRegionPatterns('`', '`') 'keepend contains=markdownLineStart'
-exe 'syn region markdownCode matchgroup=markdownCodeDelimiter' s:InlineRegionPatterns('`` \=', ' \=``') 'keepend contains=markdownLineStart'
-syn region markdownCode matchgroup=markdownCodeDelimiter start="^\s*```.*$" end="^\s*```\ze\s*$" keepend
+exe 'syn region markdownCode matchgroup=markdownCodeDelimiter' s:InlineRegionPatterns('`\%(``\)\@!', '`') 'keepend contains=markdownLineStart'
+exe 'syn region markdownCode matchgroup=markdownCodeDelimiter' s:InlineRegionPatterns('`\@1<!```\@! \=', ' \=``') 'keepend contains=markdownLineStart'
+syn region markdownFencedCode matchgroup=markdownCodeFence start="\s*```.*$" end="^\s*```\ze\s*$" contained keepend
+syn cluster markdownBlock add=markdownFencedCode
 
 syn match markdownFootnote "\[^[^\]]\+\]"
 syn match markdownFootnoteDefinition "^\[^[^\]]\+\]:"
 
 if main_syntax ==# 'markdown'
   for s:type in g:markdown_fenced_languages
-    exe 'syn region markdownHighlight'.substitute(matchstr(s:type,'[^=]*$'),'\..*','','').' matchgroup=markdownCodeDelimiter start="^\s*```\s*'.matchstr(s:type,'[^=]*').'\>.*$" end="^\s*```\ze\s*$" keepend contains=@markdownHighlight'.substitute(matchstr(s:type,'[^=]*$'),'\.','','g')
+    let s:type = matchstr(s:type,'[^=]*$')
+    let s:regionName = 'markdownHighlight'.substitute(s:type,'\..*','','')
+    exe 'syn region' s:regionName ' matchgroup=markdownCodeDelimiter start="\s*```\s*'.s:type.'\>.*$" end="^\s*```\ze\s*$" keepend contained contains=@markdownHighlight'.substitute(s:type,'\.','','g')
+    exe 'syn cluster markdownBlock add='.s:regionName
   endfor
   unlet! s:type
+  unlet! s:regionName
 endif
 
 syn match markdownEscape "\\[][\\`*_{}()#+.!-]"
@@ -140,6 +145,7 @@ hi def link markdownBoldDelimiter         markdownBold
 hi def link markdownBoldItalic            htmlBoldItalic
 hi def link markdownBoldItalicDelimiter   markdownBoldItalic
 hi def link markdownCodeDelimiter         Delimiter
+hi def link markdownCodeFence             markdownCodeDelimiter
 
 hi def link markdownEscape                Special
 hi def link markdownError                 Error
