@@ -70,7 +70,7 @@ syn region markdownUrlTitle matchgroup=markdownUrlTitleDelimiter start=+"+ end=+
 syn region markdownUrlTitle matchgroup=markdownUrlTitleDelimiter start=+'+ end=+'+ keepend contained
 syn region markdownUrlTitle matchgroup=markdownUrlTitleDelimiter start=+(+ end=+)+ keepend contained
 
-syn region markdownLinkText matchgroup=markdownLinkTextDelimiter start="!\=\[\ze\%([^]]\|\n\%(>\s\=\)*\s*[^> \t]\@=\)*] \=[[(]" end="]" nextgroup=markdownLink,markdownId skipwhite contains=@markdownInline,markdownLineStart
+syn region markdownLinkText matchgroup=markdownLinkTextDelimiter start="!\=\[\ze\%([^]]\|\n\%(>\s\=\)*\s*[^> \t]\@=\)*]\%(\n\s*\| \=\)[[(]" end="]" nextgroup=markdownLink,markdownId skipwhite skipnl contains=@markdownInline,markdownLineStart
 syn region markdownLink matchgroup=markdownLinkDelimiter start="(" end=")" contains=markdownUrl keepend contained
 syn region markdownId matchgroup=markdownIdDelimiter start="\[" end="\]" keepend contained
 syn region markdownAutomaticLink matchgroup=markdownUrlDelimiter start="<\%(\w\+:\|[[:alnum:]_+-]\+@\)\@=" end=">" keepend oneline
