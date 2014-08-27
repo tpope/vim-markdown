@@ -92,7 +92,9 @@ exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter' s:Inl
 
 exe 'syn region markdownCode matchgroup=markdownCodeDelimiter' s:InlineRegionPatterns('`\%(``\)\@!', '`') 'keepend contains=markdownLineStart'
 exe 'syn region markdownCode matchgroup=markdownCodeDelimiter' s:InlineRegionPatterns('`\@1<!```\@! \=', ' \=``') 'keepend contains=markdownLineStart'
-syn region markdownFencedCode matchgroup=markdownCodeFence start="\s*```.*$" end="^\s*```\ze\s*$" contained keepend
+" experimentally, markdown code fences do not require match start/end markers,
+" they only care that the start/end markers are independently valid.
+syn region markdownFencedCode matchgroup=markdownCodeFence start="\s*```.*$" start="\s*\~\{3}.*$" end="^\s*`\{3,}\ze\s*$" end="^\s*\~\{3,}\ze\s*$" contained keepend
 syn cluster markdownBlock add=markdownFencedCode
 
 syn match markdownFootnote "\[^[^\]]\+\]"
