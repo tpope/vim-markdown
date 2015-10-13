@@ -86,6 +86,8 @@ exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start=
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`" end="`" keepend contains=markdownLineStart
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`` \=" end=" \=``" keepend contains=markdownLineStart
 syn region markdownCode matchgroup=markdownCodeDelimiter start="^\s*```.*$" end="^\s*```\ze\s*$" keepend
+syn region markdownEqn matchgroup=markdownEqnDelimiter start="\$" end="\$" keepend contains=markdownLineStart
+syn region markdownEqn matchgroup=markdownEqnDelimiter start="^\s*\$\$.*$" end="^\s*\$\$\ze\s*$" keepend
 
 syn match markdownFootnote "\[^[^\]]\+\]"
 syn match markdownFootnoteDefinition "^\[^[^\]]\+\]:"
@@ -133,6 +135,7 @@ hi def link markdownBoldDelimiter         markdownBold
 hi def link markdownBoldItalic            htmlBoldItalic
 hi def link markdownBoldItalicDelimiter   markdownBoldItalic
 hi def link markdownCodeDelimiter         Delimiter
+hi def link markdownEqnDelimiter          Comment
 
 hi def link markdownEscape                Special
 hi def link markdownError                 Error
