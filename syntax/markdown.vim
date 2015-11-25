@@ -60,6 +60,7 @@ syn match markdownOrderedListMarker "\%(\t\| \{0,4}\)\<\d\+\.\%(\s\+\S\)\@=" con
 
 syn match markdownRule "\* *\* *\*[ *]*$" contained
 syn match markdownRule "- *- *-[ -]*$" contained
+syn match markdownRule "_ *_ *_[ _]*$" contained
 
 syn match markdownLineBreak " \{2,\}$"
 
@@ -76,12 +77,12 @@ syn region markdownId matchgroup=markdownIdDelimiter start="\[" end="\]" keepend
 syn region markdownAutomaticLink matchgroup=markdownUrlDelimiter start="<\%(\w\+:\|[[:alnum:]_+-]\+@\)\@=" end=">" keepend oneline
 
 let s:concealends = has('conceal') ? ' concealends' : ''
-exe 'syn region markdownItalic matchgroup=markdownItalicDelimiter start="\S\@<=\*\|\*\S\@=" end="\S\@<=\*\|\*\S\@=" keepend contains=markdownLineStart' . s:concealends
-exe 'syn region markdownItalic matchgroup=markdownItalicDelimiter start="\S\@<=_\|_\S\@=" end="\S\@<=_\|_\S\@=" keepend contains=markdownLineStart' . s:concealends
-exe 'syn region markdownBold matchgroup=markdownBoldDelimiter start="\S\@<=\*\*\|\*\*\S\@=" end="\S\@<=\*\*\|\*\*\S\@=" keepend contains=markdownLineStart,markdownItalic' . s:concealends
-exe 'syn region markdownBold matchgroup=markdownBoldDelimiter start="\S\@<=__\|__\S\@=" end="\S\@<=__\|__\S\@=" keepend contains=markdownLineStart,markdownItalic' . s:concealends
-exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\S\@<=\*\*\*\|\*\*\*\S\@=" end="\S\@<=\*\*\*\|\*\*\*\S\@=" keepend contains=markdownLineStart' . s:concealends
-exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\S\@<=___\|___\S\@=" end="\S\@<=___\|___\S\@=" keepend contains=markdownLineStart' . s:concealends
+exe 'syn region markdownItalic matchgroup=markdownItalicDelimiter         start="\(\s\|\*\|^\)\@<!\*\{1\}\|\*\{1\}\(\s\|\*\|$\)\@!" end="\(\s\|\*\)\@<!\*\{1\}\|\*\{1\}\(\s\|\*\)\@!" keepend contains=markdownLineStart' . s:concealends
+exe 'syn region markdownBold matchgroup=markdownBoldDelimiter             start="\(\s\|\*\|^\)\@<!\*\{2\}\|\*\{2\}\(\s\|\*\|$\)\@!" end="\(\s\|\*\)\@<!\*\{2\}\|\*\{2\}\(\s\|\*\)\@!" keepend contains=markdownLineStart' . s:concealends
+exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\(\s\|\*\|^\)\@<!\*\{3\}\|\*\{3\}\(\s\|\*\|$\)\@!" end="\(\s\|\*\)\@<!\*\{3\}\|\*\{3\}\(\s\|\*\)\@!" keepend contains=markdownLineStart' . s:concealends
+exe 'syn region markdownItalic matchgroup=markdownItalicDelimiter         start="\(\s\|_\|^\)\@<!_\{1\}\|_\{1\}\(\s\|_\|$\)\@!" end="\(\s\|_\)\@<!_\{1\}\|_\{1\}\(\s\|_\)\@!" keepend contains=markdownLineStart' . s:concealends
+exe 'syn region markdownBold matchgroup=markdownBoldDelimiter             start="\(\s\|_\|^\)\@<!_\{2\}\|_\{2\}\(\s\|_\|$\)\@!" end="\(\s\|_\)\@<!_\{2\}\|_\{2\}\(\s\|_\)\@!" keepend contains=markdownLineStart' . s:concealends
+exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\(\s\|_\|^\)\@<!_\{3\}\|_\{3\}\(\s\|_\|$\)\@!" end="\(\s\|_\)\@<!_\{3\}\|_\{3\}\(\s\|_\)\@!" keepend contains=markdownLineStart' . s:concealends
 
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`" end="`" keepend contains=markdownLineStart
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`` \=" end=" \=``" keepend contains=markdownLineStart
