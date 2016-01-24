@@ -22,6 +22,11 @@ endif
 function! MarkdownFold()
   let line = getline(v:lnum)
 
+  " Front matter
+  if v:lnum == 1 && line == '---'
+    return ">20"
+  endif
+
   " Regular headers
   let depth = match(line, '\(^#\+\)\@<=\( .*$\)\@=')
   if depth > 0
@@ -36,6 +41,12 @@ function! MarkdownFold()
 
   if (line =~ '^.\+$') && (nextline =~ '^-\+$')
     return ">2"
+  endif
+
+  " End of front matter
+  let prevline = getline(v:lnum - 1)
+  if (prevline == '...') && (foldlevel(v:lnum-1) == 20)
+    return '>0'
   endif
 
   return "="
