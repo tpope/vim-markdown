@@ -12,6 +12,10 @@ if !exists('main_syntax')
   let main_syntax = 'markdown'
 endif
 
+if !exists('g:markdown_criticmarkup_force_colors')
+  let g:markdown_criticmarkup_force_colors = 0
+endif
+
 runtime! syntax/html.vim
 unlet! b:current_syntax
 
@@ -118,17 +122,19 @@ endif
 syn match markdownEscape "\\[][\\`*_{}()<>#+.!-]"
 syn match markdownError "\w\@<=_\w\@="
 
-hi CMAdd        gui=bold guifg=LimeGreen cterm=bold ctermfg=Green
-hi CMDelete     gui=bold guifg=Red       cterm=bold ctermfg=Red
-hi CMSubstitute gui=bold guifg=goldenrod    cterm=bold ctermfg=Yellow
-hi CMHighlight  gui=bold guifg=Magenta   cterm=bold ctermfg=Magenta
-hi CMComment    gui=bold guifg=DodgerBlue1      cterm=bold ctermfg=Cyan
-
-hi def link CMAdd                         CMAdd
-hi def link CMDelete                      CMDelete
-hi def link CMSubstitute                  CMSubstitute
-hi def link CMHighlight                   CMHighlight
-hi def link CMComment                     CMComment
+if get(g:, 'markdown_criticmarkup_force_colors', 1)
+  hi CMAdd        gui=bold guifg=LimeGreen cterm=bold ctermfg=Green
+  hi CMDelete     gui=bold guifg=Red       cterm=bold ctermfg=Red
+  hi CMSubstitute gui=bold guifg=goldenrod    cterm=bold ctermfg=Yellow
+  hi CMHighlight  gui=bold guifg=Magenta   cterm=bold ctermfg=Magenta
+  hi CMComment    gui=bold guifg=DodgerBlue1      cterm=bold ctermfg=Cyan
+else
+  hi def link CMAdd                         Todo
+  hi def link CMDelete                      Error
+  hi def link CMSubstitute                  Search
+  hi def link CMHighlight                   Debug
+  hi def link CMComment                     Comment
+endif
 
 hi def link markdownH1                    htmlH1
 hi def link markdownH2                    htmlH2
