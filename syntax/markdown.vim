@@ -36,7 +36,7 @@ syn match markdownValid '&\%(#\=\w*;\)\@!'
 syn match markdownLineStart "^[<@]\@!" nextgroup=@markdownBlock,htmlSpecialChar
 
 syn cluster markdownBlock contains=markdownH1,markdownH2,markdownH3,markdownH4,markdownH5,markdownH6,markdownBlockquote,markdownListMarker,markdownOrderedListMarker,markdownCodeBlock,markdownRule
-syn cluster markdownInline contains=markdownLineBreak,markdownLinkText,markdownItalic,markdownBold,markdownCode,markdownEscape,@htmlTop,markdownError
+syn cluster markdownInline contains=markdownLineBreak,markdownLinkText,markdownItalic,markdownBold,markdownCode,markdownEscape,@htmlTop,markdownError,markdownHighlighttex
 
 syn match markdownH1 "^.\+\n=\+$" contained contains=@markdownInline,markdownHeadingRule,markdownAutomaticLink
 syn match markdownH2 "^.\+\n-\+$" contained contains=@markdownInline,markdownHeadingRule,markdownAutomaticLink
@@ -99,6 +99,11 @@ endif
 
 syn match markdownEscape "\\[][\\`*_{}()#+.!-]"
 syn match markdownError "\w\@<=_\w\@="
+
+let g:tex_no_error=1
+syn include @markdownHighlighttex syntax/tex.vim
+syn region markdownHighlighttex matchgroup=markdownCodeDelimiter start="\\\\(" end="\\\\)" keepend contains=@markdownHighlighttex
+syn region markdownHighlighttex matchgroup=markdownCodeDelimiter start="\\\\\[" end="\\\\\]" keepend contains=@markdownHighlighttex
 
 hi def link markdownH1                    htmlH1
 hi def link markdownH2                    htmlH2
