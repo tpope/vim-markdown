@@ -102,8 +102,10 @@ syn match markdownError "\w\@<=_\w\@="
 
 let g:tex_no_error=1
 syn include @markdownHighlighttex syntax/tex.vim
-syn region markdownHighlighttex matchgroup=markdownCodeDelimiter start="\\\\(" end="\\\\)" keepend contains=@markdownHighlighttex
+syn region markdownHighlighttex matchgroup=markdownCodeDelimiter start="\\\\(\ze[^ \n]" end="[^ \n]\zs\\\\)" keepend contains=@markdownHighlighttex
 syn region markdownHighlighttex matchgroup=markdownCodeDelimiter start="\\\\\[" end="\\\\\]" keepend contains=@markdownHighlighttex
+syn region markdownHighlighttex matchgroup=markdownCodeDelimiter start="\$\ze[^ \n]" end="[^ \n]\zs\$" keepend contains=@markdownHighlighttex
+syn region markdownHighlighttex matchgroup=markdownCodeDelimiter start="\$\$" end="\$\$" keepend contains=@markdownHighlighttex
 
 hi def link markdownH1                    htmlH1
 hi def link markdownH2                    htmlH2
