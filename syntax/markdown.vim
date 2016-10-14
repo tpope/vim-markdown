@@ -92,6 +92,31 @@ exe 'syn region markdownBold matchgroup=markdownBoldDelimiter start="\S\@<=__\|_
 exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\S\@<=\*\*\*\|\*\*\*\S\@=" end="\S\@<=\*\*\*\|\*\*\*\S\@=" keepend contains=markdownLineStart,@Spell' . s:concealends
 exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\S\@<=___\|___\S\@=" end="\S\@<=___\|___\S\@=" keepend contains=markdownLineStart,@Spell' . s:concealends
 
+if get(g:, 'vim_markdown_frontmatter', 0)
+  " YAML frontmatter
+  syn include @yamlTop syntax/yaml.vim
+  syn region markdownCode matchgroup=markdownCodeDelimiter start="\%^---$" end="^---$" contains=@yamlTop keepend
+  unlet! b:current_syntax
+
+  " TOML frontmatter
+  try
+    syn include @tomlTop syntax/toml.vim
+    syn region markdownCode matchgroup=markdownCodeDelimiter start="\%^+++$" end="^+++$" transparent contains=@tomlTop keepend
+    unlet! b:current_syntax
+  catch /E484/
+    syn region markdownCode matchgroup=markdownCodeDelimiter start="\%^+++$" end="^+++$"
+  endtry
+
+  " JSON frontmatter
+  try
+    syn include @jsonTop syntax/json.vim
+    syn region markdownCode matchgroup=markdownCodeDelimiter start="\%^{$" end="^}$" contains=@jsonTop keepend
+    unlet! b:current_syntax
+  catch /E484/
+    syn region markdownCode matchgroup=markdownCodeDelimiter start="\%^{$" end="^}$"
+  endtry
+endif
+
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`" end="`" keepend contains=markdownLineStart
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`` \=" end=" \=``" keepend contains=markdownLineStart
 syn region markdownCode matchgroup=markdownCodeDelimiter start="^\s*```*.*$" end="^\s*```*\ze\s*$" keepend
