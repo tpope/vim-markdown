@@ -42,7 +42,7 @@ syn match markdownValid '&\%(#\=\w*;\)\@!'
 syn match markdownLineStart "^[<@]\@!" nextgroup=@markdownBlock,htmlSpecialChar
 
 syn cluster markdownBlock contains=markdownH1,markdownH2,markdownH3,markdownH4,markdownH5,markdownH6,markdownBlockquote,markdownListMarker,markdownOrderedListMarker,markdownCodeBlock,markdownRule
-syn cluster markdownInline contains=markdownLineBreak,markdownLinkText,markdownItalic,markdownBold,markdownCode,markdownEscape,@htmlTop,markdownError
+syn cluster markdownInline contains=markdownLineBreak,markdownLinkText,markdownItalic,markdownBold,markdownCode,markdownEscape,@htmlTop,markdownError,markdownMath
 
 syn match markdownH1 "^.\+\n=\+$" contained contains=@markdownInline,markdownHeadingRule,markdownAutomaticLink
 syn match markdownH2 "^.\+\n-\+$" contained contains=@markdownInline,markdownHeadingRule,markdownAutomaticLink
@@ -120,6 +120,13 @@ endif
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`" end="`" keepend contains=markdownLineStart
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`` \=" end=" \=``" keepend contains=markdownLineStart
 syn region markdownCode matchgroup=markdownCodeDelimiter start="^\s*```*.*$" end="^\s*```*\ze\s*$" keepend
+
+if get(g:, 'vim_markdown_math', 0)
+  let g:tex_conceal= ''
+  syn include @tex syntax/tex.vim
+  syn region markdownMath start="\\\@<!\$" end="\$" contains=@tex keepend
+  syn region markdownMath start="\\\@<!\$\$" end="\$\$" contains=@tex keepend
+endif
 
 syn match markdownFootnote "\[^[^\]]\+\]"
 syn match markdownFootnoteDefinition "^\[^[^\]]\+\]:"
