@@ -42,7 +42,7 @@ syn match markdownValid '&\%(#\=\w*;\)\@!'
 syn match markdownLineStart "^[<@]\@!" nextgroup=@markdownBlock,htmlSpecialChar
 
 syn cluster markdownBlock contains=markdownH1,markdownH2,markdownH3,markdownH4,markdownH5,markdownH6,markdownBlockquote,markdownListMarker,markdownOrderedListMarker,markdownCodeBlock,markdownRule
-syn cluster markdownInline contains=markdownLineBreak,markdownLinkText,markdownItalic,markdownBold,markdownCode,markdownEscape,@htmlTop,markdownError
+syn cluster markdownInline contains=markdownLineBreak,markdownLinkText,markdownItalic,markdownBold,markdownCode,markdownEscape,@htmlTop,markdownError,markdownMath
 
 syn match markdownH1 "^.\+\n=\+$" contained contains=@markdownInline,markdownHeadingRule,markdownAutomaticLink
 syn match markdownH2 "^.\+\n-\+$" contained contains=@markdownInline,markdownHeadingRule,markdownAutomaticLink
@@ -92,9 +92,41 @@ exe 'syn region markdownBold matchgroup=markdownBoldDelimiter start="\S\@<=__\|_
 exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\S\@<=\*\*\*\|\*\*\*\S\@=" end="\S\@<=\*\*\*\|\*\*\*\S\@=" keepend contains=markdownLineStart,@Spell' . s:concealends
 exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\S\@<=___\|___\S\@=" end="\S\@<=___\|___\S\@=" keepend contains=markdownLineStart,@Spell' . s:concealends
 
+if get(g:, 'vim_markdown_frontmatter', 0)
+  " YAML frontmatter
+  syn include @yamlTop syntax/yaml.vim
+  syn region markdownCode matchgroup=markdownCodeDelimiter start="\%^---$" end="^---$" contains=@yamlTop keepend
+  unlet! b:current_syntax
+
+  " TOML frontmatter
+  try
+    syn include @tomlTop syntax/toml.vim
+    syn region markdownCode matchgroup=markdownCodeDelimiter start="\%^+++$" end="^+++$" transparent contains=@tomlTop keepend
+    unlet! b:current_syntax
+  catch /E484/
+    syn region markdownCode matchgroup=markdownCodeDelimiter start="\%^+++$" end="^+++$"
+  endtry
+
+  " JSON frontmatter
+  try
+    syn include @jsonTop syntax/json.vim
+    syn region markdownCode matchgroup=markdownCodeDelimiter start="\%^{$" end="^}$" contains=@jsonTop keepend
+    unlet! b:current_syntax
+  catch /E484/
+    syn region markdownCode matchgroup=markdownCodeDelimiter start="\%^{$" end="^}$"
+  endtry
+endif
+
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`" end="`" keepend contains=markdownLineStart
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`` \=" end=" \=``" keepend contains=markdownLineStart
 syn region markdownCode matchgroup=markdownCodeDelimiter start="^\s*```*.*$" end="^\s*```*\ze\s*$" keepend
+
+if get(g:, 'vim_markdown_math', 0)
+  let g:tex_conceal= ''
+  syn include @tex syntax/tex.vim
+  syn region markdownMath start="\\\@<!\$" end="\$" contains=@tex keepend
+  syn region markdownMath start="\\\@<!\$\$" end="\$\$" contains=@tex keepend
+endif
 
 syn match markdownFootnote "\[^[^\]]\+\]"
 syn match markdownFootnoteDefinition "^\[^[^\]]\+\]:"
@@ -105,7 +137,7 @@ if main_syntax ==# 'markdown'
     if has_key(s:done_include, matchstr(s:type,'[^.]*'))
       continue
     endif
-    exe 'syn region markdownHighlight'.substitute(matchstr(s:type,'[^=]*$'),'\..*','','').' matchgroup=markdownCodeDelimiter start="^\s*```*\s*'.matchstr(s:type,'[^=]*').'\>.*$" end="^\s*```*\ze\s*$" keepend contains=@markdownHighlight'.substitute(matchstr(s:type,'[^=]*$'),'\.','','g')
+    exe 'syn region markdownHighlight'.substitute(matchstr(s:type,'[^=]*$'),'\..*','','').' matchgroup=markdownCodeDelimiter start="^\s*```[{\.]*\s*'.matchstr(s:type,'[^=]*').'\>.*$" end="^\s*```*\ze\s*$" keepend contains=@markdownHighlight'.substitute(matchstr(s:type,'[^=]*$'),'\.','','g')
     let s:done_include[matchstr(s:type,'[^.]*')] = 1
   endfor
   unlet! s:type

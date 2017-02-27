@@ -20,6 +20,10 @@ To disable markdown syntax concealing add the following to your vimrc:
 
     let g:markdown_syntax_conceal = 0
 
+To highlight YAML, TOML or JSON front matter as used by Pandoc, Jekyll or Hugo.
+
+    let g:vim_markdown_frontmatter = 1
+
 ## License
 
 Copyright © Tim Pope.  Distributed under the same terms as Vim itself.
