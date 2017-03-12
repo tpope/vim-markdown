@@ -115,6 +115,10 @@ endif
 syn match markdownEscape "\\[][\\`*_{}()<>#+.!-]"
 syn match markdownError "\w\@<=_\w\@="
 
+" highlight YAML frontmatter
+syn include @yamlTop syntax/yaml.vim
+syntax match Comment /\%^---\_$\_.\{-}\_^---$/ contains=@yamlTop
+
 hi def link markdownH1                    htmlH1
 hi def link markdownH2                    htmlH2
 hi def link markdownH3                    htmlH3
