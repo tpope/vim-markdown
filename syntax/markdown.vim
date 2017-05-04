@@ -12,6 +12,14 @@ if !exists('main_syntax')
   let main_syntax = 'markdown'
 endif
 
+if !exists('g:markdown_criticmarkup')
+  let g:markdown_criticmarkup = 1
+endif
+
+if !exists('g:markdown_criticmarkup_force_colors')
+  let g:markdown_criticmarkup_force_colors = 0
+endif
+
 runtime! syntax/html.vim
 unlet! b:current_syntax
 
@@ -45,7 +53,7 @@ syn match markdownValid '&\%(#\=\w*;\)\@!'
 syn match markdownLineStart "^[<@]\@!" nextgroup=@markdownBlock,htmlSpecialChar
 
 syn cluster markdownBlock contains=markdownH1,markdownH2,markdownH3,markdownH4,markdownH5,markdownH6,markdownBlockquote,markdownListMarker,markdownOrderedListMarker,markdownCodeBlock,markdownRule
-syn cluster markdownInline contains=markdownLineBreak,markdownLinkText,markdownItalic,markdownBold,markdownCode,markdownEscape,@htmlTop,markdownError
+syn cluster markdownInline contains=markdownLineBreak,markdownLinkText,markdownItalic,markdownBold,markdownCode,markdownEscape,@htmlTop,markdownError,CMAdd,CMDelete,CMSubstitute,CMHighlight,CMComment
 
 syn match markdownH1 "^.\+\n=\+$" contained contains=@markdownInline,markdownHeadingRule,markdownAutomaticLink
 syn match markdownH2 "^.\+\n-\+$" contained contains=@markdownInline,markdownHeadingRule,markdownAutomaticLink
@@ -105,11 +113,11 @@ syn match markdownFootnoteDefinition "^\[^[^\]]\+\]:"
 if main_syntax ==# 'markdown'
   let s:done_include = {}
   for s:type in g:markdown_fenced_languages
-    if has_key(s:done_include, matchstr(s:type,'[^.]*'))
-      continue
-    endif
-    exe 'syn region markdownHighlight'.substitute(matchstr(s:type,'[^=]*$'),'\..*','','').' matchgroup=markdownCodeDelimiter start="^\s*```*\s*'.matchstr(s:type,'[^=]*').'\>.*$" end="^\s*```*\ze\s*$" keepend contains=@markdownHighlight'.substitute(matchstr(s:type,'[^=]*$'),'\.','','g')
-    let s:done_include[matchstr(s:type,'[^.]*')] = 1
+	if has_key(s:done_include, matchstr(s:type,'[^.]*'))
+	  continue
+	endif
+	exe 'syn region markdownHighlight'.substitute(matchstr(s:type,'[^=]*$'),'\..*','','').' matchgroup=markdownCodeDelimiter start="^\s*```*\s*'.matchstr(s:type,'[^=]*').'\>.*$" end="^\s*```*\ze\s*$" keepend contains=@markdownHighlight'.substitute(matchstr(s:type,'[^=]*$'),'\.','','g')
+	let s:done_include[matchstr(s:type,'[^.]*')] = 1
   endfor
   unlet! s:type
   unlet! s:done_include
@@ -117,6 +125,28 @@ endif
 
 syn match markdownEscape "\\[][\\`*_{}()<>#+.!-]"
 syn match markdownError "\w\@<=_\w\@="
+
+if get(g:, 'markdown_criticmarkup', 1)
+  syn region CMAdd start="\S\@<={++\|{++" end="++}\|++}\S\@=" keepend contains=markdownLineStart
+  syn region CMDelete start="\S\@<={--\|{--" end="--}\|--}\S\@=" keepend contains=markdownLineStart
+  syn region CMSubstitute start="\S\@<={\~\~\|{\~\~" end="\~\~}\|\~\~}\S\@=" keepend contains=markdownLineStart
+  syn region CMHighlight start="\S\@<={==\|{==" end="==}\|==}\S\@=" keepend contains=markdownLineStart
+  syn region CMComment start="\S\@<={>>\|{>>" end="<<}\|<<}\S\@=" keepend contains=markdownLineStart
+
+  if get(g:, 'markdown_criticmarkup_force_colors', 1)
+	hi CMAdd        gui=bold guifg=LimeGreen cterm=bold ctermfg=Green
+	hi CMDelete     gui=bold guifg=Red       cterm=bold ctermfg=Red
+	hi CMSubstitute gui=bold guifg=goldenrod    cterm=bold ctermfg=Yellow
+	hi CMHighlight  gui=bold guifg=Magenta   cterm=bold ctermfg=Magenta
+	hi CMComment    gui=bold guifg=DodgerBlue1      cterm=bold ctermfg=Cyan
+  else
+	hi def link CMAdd                         Todo
+	hi def link CMDelete                      Error
+	hi def link CMSubstitute                  Search
+	hi def link CMHighlight                   Debug
+	hi def link CMComment                     Comment
+  endif
+endif
 
 hi def link markdownH1                    htmlH1
 hi def link markdownH2                    htmlH2
