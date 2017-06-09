@@ -30,38 +30,41 @@ unlet! s:type
 syn sync minlines=10
 syn case ignore
 
-syn match markdownValid '[<>]\c[a-z/$!]\@!'
-syn match markdownValid '&\%(#\=\w*;\)\@!'
+syn match markdownLineBreak " \{2,}$"
 
-syn match markdownLineStart "^[<@]\@!" nextgroup=@markdownBlock,htmlSpecialChar
+syn match markdown "^" nextgroup=@markdownBlock
+syn cluster markdownBlock contains=markdownParagraph,markdownRule,markdownBlockquote,markdownCodeBlock,@markdownHeading,markdownList
+syn cluster markdownInline contains=markdownLineBreak,markdownLinkText,markdownItalic,markdownBold,markdownCode,markdownEscape,@htmlTop,markdownError,markdownHighlighttex,markdownAutomaticLink
 
-syn cluster markdownBlock contains=markdownH1,markdownH2,markdownH3,markdownH4,markdownH5,markdownH6,markdownBlockquote,markdownListMarker,markdownOrderedListMarker,markdownCodeBlock,markdownRule
-syn cluster markdownInline contains=markdownLineBreak,markdownLinkText,markdownItalic,markdownBold,markdownCode,markdownEscape,@htmlTop,markdownError,markdownHighlighttex
+syn region markdownParagraph start="^ \{0,3}\%(#.\+\)\@!\S" end="^\s*$\|\%(\n \{0,3}\%(#.\+\|>\s*\)\)\@=" keepend contains=@markdownInline contained
 
-syn match markdownH1 "^.\+\n=\+$" contained contains=@markdownInline,markdownHeadingRule,markdownAutomaticLink
-syn match markdownH2 "^.\+\n-\+$" contained contains=@markdownInline,markdownHeadingRule,markdownAutomaticLink
+syn match markdownRule " \{0,3}\* *\* *\*[ *]*$" contained
+syn match markdownRule " \{0,3}- *- *-[ -]*$" contained
 
-syn match markdownHeadingRule "^[=-]\+$" contained
+syn region markdownBlockquote matchgroup=markdownBlockquoteDelimiter start=" \{0,3}>\%(\s\|$\)" end="$" contains=@markdownInline contained 
 
-syn region markdownH1 matchgroup=markdownHeadingDelimiter start="##\@!"      end="#*\s*$" keepend oneline contains=@markdownInline,markdownAutomaticLink contained
-syn region markdownH2 matchgroup=markdownHeadingDelimiter start="###\@!"     end="#*\s*$" keepend oneline contains=@markdownInline,markdownAutomaticLink contained
-syn region markdownH3 matchgroup=markdownHeadingDelimiter start="####\@!"    end="#*\s*$" keepend oneline contains=@markdownInline,markdownAutomaticLink contained
-syn region markdownH4 matchgroup=markdownHeadingDelimiter start="#####\@!"   end="#*\s*$" keepend oneline contains=@markdownInline,markdownAutomaticLink contained
-syn region markdownH5 matchgroup=markdownHeadingDelimiter start="######\@!"  end="#*\s*$" keepend oneline contains=@markdownInline,markdownAutomaticLink contained
-syn region markdownH6 matchgroup=markdownHeadingDelimiter start="#######\@!" end="#*\s*$" keepend oneline contains=@markdownInline,markdownAutomaticLink contained
+syn region markdownCodeBlock start=" \{4}" end="$" contained
 
-syn match markdownBlockquote ">\%(\s\|$\)" contained nextgroup=@markdownBlock
+syn cluster markdownHeading contains=markdownH1,markdownH2,markdownH3,markdownH4,markdownH5,markdownH6
+syn match markdownH1 "\%(\%(^\s*\n\)\@<=\|\%^\)\s*\S.*\n=\+\s*$" contains=@markdownInline,markdownHeadingRule contained
+syn match markdownH2 "\%(\%(^\s*\n\)\@<=\|\%^\)\s*\S.*\n-\+\s*$" contains=@markdownInline,markdownHeadingRule contained
+syn match markdownHeadingRule "^[=-]\+\s*$" contained
+syn region markdownH1 matchgroup=markdownHeadingDelimiter start="^ \{0,3}##\@!"      end="$" keepend oneline contains=@markdownInline contained
+syn region markdownH2 matchgroup=markdownHeadingDelimiter start="^ \{0,3}###\@!"     end="$" keepend oneline contains=@markdownInline contained
+syn region markdownH3 matchgroup=markdownHeadingDelimiter start="^ \{0,3}####\@!"    end="$" keepend oneline contains=@markdownInline contained
+syn region markdownH4 matchgroup=markdownHeadingDelimiter start="^ \{0,3}#####\@!"   end="$" keepend oneline contains=@markdownInline contained
+syn region markdownH5 matchgroup=markdownHeadingDelimiter start="^ \{0,3}######\@!"  end="$" keepend oneline contains=@markdownInline contained
+syn region markdownH6 matchgroup=markdownHeadingDelimiter start="^ \{0,3}#######\@!" end="$" keepend oneline contains=@markdownInline contained
 
-syn region markdownCodeBlock start="    \|\t" end="$" contained
+syn region markdownList start="\%(\%(^\s*\n\)\@<=\|\%^\) \{0,3}\%([*+-]\|\d\+\.\)\s\+\S" end="^\s*\%(\n \{0,3}\S\)\@=\n" contained keepend contains=markdownListItemBlockL1
 
-" TODO: real nesting
-syn match markdownListMarker "\%(\t\| \{0,4\}\)[-*+]\%(\s\+\S\)\@=" contained
-syn match markdownOrderedListMarker "\%(\t\| \{0,4}\)\<\d\+\.\%(\s\+\S\)\@=" contained
+syn region markdownListItemBlockL1 start="^ \{0,3}\%([*+-]\|\d\+\.\)\s\+\S" end="\n\%( \{0,3}\%([*+-]\|\d\+\.\)\s\+\S\)\@=\|^\s*\%(\n \{0,3}\S\)\@=\n" contained keepend contains=markdownListItemL1,markdownListMarkerL1,markdownListItemBlockL2
+syn match markdownListMarkerL1 "\%(^ \{0,3}\)\@<=\%([*+-]\|\d\+\.\)\%(\s\+\S\)\@=" contained
+syn match markdownListItemL1 "\%(^ \{0,3}\%([*+-]\|\d\+\.\)\s\+\)\@<=\S.*\%(\n\%( *\%([*+-]\|\d\+\.\)\s\+\S\)\@!\s*\S.*\)*$" contained keepend contains=@markdownInline
 
-syn match markdownRule "\* *\* *\*[ *]*$" contained
-syn match markdownRule "- *- *-[ -]*$" contained
-
-syn match markdownLineBreak " \{2,\}$"
+syn region markdownListItemBlockL2 start="^ \{4,7}\%([*+-]\|\d\+\.\)\s\+\S" end="\n\%( \{4,7}\%([*+-]\|\d\+\.\)\s\+\S\)\@=\|^\s*\%(\n \{4,7}\S\)\@=\n" contained keepend contains=markdownListItemL2,markdownListMarkerL2
+syn match markdownListMarkerL2 "\%(^ \{4,7}\)\@<=\%([*+-]\|\d\+\.\)\%(\s\+\S\)\@=" contained
+syn match markdownListItemL2 "\%(^ \{4,7}\%([*+-]\|\d\+\.\)\s\+\)\@<=\S.*\%(\n\%( *\%([*+-]\|\d\+\.\)\s\+\S\)\@!\s*\S.*\)*$" contained keepend contains=@markdownInline
 
 syn region markdownIdDeclaration matchgroup=markdownLinkDelimiter start="^ \{0,3\}!\=\[" end="\]:" oneline keepend nextgroup=markdownUrl skipwhite
 syn match markdownUrl "\S\+" nextgroup=markdownUrlTitle skipwhite contained
@@ -73,15 +76,14 @@ syn region markdownUrlTitle matchgroup=markdownUrlTitleDelimiter start=+(+ end=+
 syn region markdownLinkText matchgroup=markdownLinkTextDelimiter start="!\=\[\%(\_[^]]*]\%( \=[[(]\)\)\@=" end="\]\%( \=[[(]\)\@=" nextgroup=markdownLink,markdownId skipwhite contains=@markdownInline,markdownLineStart
 syn region markdownLink matchgroup=markdownLinkDelimiter start="(" end=")" contains=markdownUrl keepend contained
 syn region markdownId matchgroup=markdownIdDelimiter start="\[" end="\]" keepend contained
-syn region markdownAutomaticLink matchgroup=markdownUrlDelimiter start="<\%(\w\+:\|[[:alnum:]_+-]\+@\)\@=" end=">" keepend oneline
+syn region markdownAutomaticLink matchgroup=markdownUrlDelimiter start="<\%(\w\+:\|[[:alnum:]_+-]\+@\)\@=" end=">" keepend oneline contained
 
-let s:concealends = has('conceal') ? ' concealends' : ''
-exe 'syn region markdownItalic matchgroup=markdownItalicDelimiter start="\S\@<=\*\|\*\S\@=" end="\S\@<=\*\|\*\S\@=" keepend contains=markdownLineStart' . s:concealends
-exe 'syn region markdownItalic matchgroup=markdownItalicDelimiter start="\S\@<=_\|_\S\@=" end="\S\@<=_\|_\S\@=" keepend contains=markdownLineStart' . s:concealends
-exe 'syn region markdownBold matchgroup=markdownBoldDelimiter start="\S\@<=\*\*\|\*\*\S\@=" end="\S\@<=\*\*\|\*\*\S\@=" keepend contains=markdownLineStart,markdownItalic' . s:concealends
-exe 'syn region markdownBold matchgroup=markdownBoldDelimiter start="\S\@<=__\|__\S\@=" end="\S\@<=__\|__\S\@=" keepend contains=markdownLineStart,markdownItalic' . s:concealends
-exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\S\@<=\*\*\*\|\*\*\*\S\@=" end="\S\@<=\*\*\*\|\*\*\*\S\@=" keepend contains=markdownLineStart' . s:concealends
-exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\S\@<=___\|___\S\@=" end="\S\@<=___\|___\S\@=" keepend contains=markdownLineStart' . s:concealends
+syn region markdownItalic matchgroup=markdownItalicDelimiter start="\S\@<=\*\|\*\S\@=" end="\S\@<=\*\|\*\S\@=" keepend contained contains=markdownLineStart
+syn region markdownItalic matchgroup=markdownItalicDelimiter start="\S\@<=_\|_\S\@=" end="\S\@<=_\|_\S\@=" keepend contained contains=markdownLineStart
+syn region markdownBold matchgroup=markdownBoldDelimiter start="\S\@<=\*\*\|\*\*\S\@=" end="\S\@<=\*\*\|\*\*\S\@=" keepend contained contains=markdownLineStart,markdownItalic
+syn region markdownBold matchgroup=markdownBoldDelimiter start="\S\@<=__\|__\S\@=" end="\S\@<=__\|__\S\@=" keepend contained contains=markdownLineStart,markdownItalic
+syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\S\@<=\*\*\*\|\*\*\*\S\@=" end="\S\@<=\*\*\*\|\*\*\*\S\@=" keepend contained contains=markdownLineStart
+syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\S\@<=___\|___\S\@=" end="\S\@<=___\|___\S\@=" keepend contained contains=markdownLineStart
 
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`" end="`" keepend contains=markdownLineStart
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`` \=" end=" \=``" keepend contains=markdownLineStart
@@ -115,9 +117,10 @@ hi def link markdownH5                    htmlH5
 hi def link markdownH6                    htmlH6
 hi def link markdownHeadingRule           markdownRule
 hi def link markdownHeadingDelimiter      Delimiter
-hi def link markdownOrderedListMarker     markdownListMarker
-hi def link markdownListMarker            htmlTagName
-hi def link markdownBlockquote            Comment
+hi def link markdownListMarkerL1          htmlTagName
+hi def link markdownListMarkerL2          htmlTagName
+hi def link markdownBlockquoteDelimiter   Comment
+hi     link markdownBlockquote            Normal
 hi def link markdownRule                  PreProc
 
 hi def link markdownFootnote              Typedef
