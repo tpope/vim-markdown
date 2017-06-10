@@ -33,8 +33,8 @@ syn case ignore
 syn match markdownLineBreak " \{2,}$"
 
 syn match markdown "^" nextgroup=@markdownBlock
-syn cluster markdownBlock contains=markdownParagraph,markdownRule,markdownBlockquote,markdownCodeBlock,@markdownHeading,markdownList
 syn cluster markdownInline contains=markdownLineBreak,markdownLinkText,markdownItalic,markdownBold,markdownCode,markdownEscape,@htmlTop,markdownError,markdownHighlighttex,markdownAutomaticLink
+syn cluster markdownBlock contains=markdownParagraph,markdownRule,markdownBlockquote,markdownCodeBlock,@markdownHeading,markdownList
 
 syn region markdownParagraph start="^ \{0,3}\%(#.\+\)\@!\S" end="^\s*$\|\%(\n \{0,3}\%(#.\+\|>\s*\)\)\@=" keepend contains=@markdownInline contained
 
@@ -46,9 +46,9 @@ syn region markdownBlockquote matchgroup=markdownBlockquoteDelimiter start=" \{0
 syn region markdownCodeBlock start=" \{4}" end="$" contained
 
 syn cluster markdownHeading contains=markdownH1,markdownH2,markdownH3,markdownH4,markdownH5,markdownH6
-syn match markdownH1 "\%(\%(^\s*\n\)\@<=\|\%^\)\s*\S.*\n=\+\s*$" contains=@markdownInline,markdownHeadingRule contained
-syn match markdownH2 "\%(\%(^\s*\n\)\@<=\|\%^\)\s*\S.*\n-\+\s*$" contains=@markdownInline,markdownHeadingRule contained
-syn match markdownHeadingRule "^[=-]\+\s*$" contained
+syn match markdownH1 "\%(\%(^\s*\n\)\@<=\|\%^\) \{0}\s*\S.*\n=\+\s*$" contains=@markdownInline,markdownHeadingRule contained
+syn match markdownH2 "\%(\%(^\s*\n\)\@<=\|\%^\) \{0}\s*\S.*\n-\+\s*$" contains=@markdownInline,markdownHeadingRule contained
+syn match markdownHeadingRule "^ \{0}[=-]\+\s*$" contained
 syn region markdownH1 matchgroup=markdownHeadingDelimiter start="^ \{0,3}##\@!"      end="$" keepend oneline contains=@markdownInline contained
 syn region markdownH2 matchgroup=markdownHeadingDelimiter start="^ \{0,3}###\@!"     end="$" keepend oneline contains=@markdownInline contained
 syn region markdownH3 matchgroup=markdownHeadingDelimiter start="^ \{0,3}####\@!"    end="$" keepend oneline contains=@markdownInline contained
