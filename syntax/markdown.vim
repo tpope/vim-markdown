@@ -30,43 +30,72 @@ unlet! s:type
 syn sync minlines=10
 syn case ignore
 
+syn match markdown "^" nextgroup=@markdownBlockL0
+syn cluster markdownInline contains=markdownLineBreak,markdownLinkText,markdownItalic,markdownBold,markdownCode,markdownEscape,@htmlTop,markdownError,markdownHighlighttex,markdownAutomaticLink
+
 syn match markdownLineBreak " \{2,}$"
 
-syn match markdown "^" nextgroup=@markdownBlock
-syn cluster markdownInline contains=markdownLineBreak,markdownLinkText,markdownItalic,markdownBold,markdownCode,markdownEscape,@htmlTop,markdownError,markdownHighlighttex,markdownAutomaticLink
-syn cluster markdownBlock contains=markdownParagraph,markdownRule,markdownBlockquote,markdownCodeBlock,@markdownHeading,markdownList
+if !exists('g:markdown_list_nesting_depth')
+  let g:markdown_list_nesting_depth = 2
+endif
+let s:nesting = g:markdown_list_nesting_depth
+while s:nesting >= 0
+  let s:indent_num = s:nesting * &tabstop
+  let s:indent_pat = ' \{' . s:indent_num . ',' . (s:indent_num + &tabstop - 1) . '}'
+  if s:nesting == 0
+    exe 'syn cluster markdownBlockL' . s:nesting . ' contains=markdownList,markdownParagraphL' . s:nesting . ',markdownRuleL' . s:nesting . ',markdownBlockquoteL' . s:nesting . ',markdownCodeBlockL' . s:nesting . ',@markdownHeadingL' . s:nesting
+  else
+    exe 'syn cluster markdownBlockL' . s:nesting . ' contains=markdownListItemBlockL' . s:nesting . ',markdownParagraphL' . s:nesting . ',markdownRuleL' . s:nesting . ',markdownBlockquoteL' . s:nesting . ',markdownCodeBlockL' . s:nesting . ',@markdownHeadingL' . s:nesting
+  endif
 
-syn region markdownParagraph start="^ \{0,3}\%(#.\+\)\@!\S" end="^\s*$\|\%(\n \{0,3}\%(#.\+\|>\s*\)\)\@=" keepend contains=@markdownInline contained
+  exe 'syn region markdownParagraphL' . s:nesting . ' start="^' . s:indent_pat . '\%(#.\+\)\@!\S" end="^\s*$\|\%(\n' . s:indent_pat . '\%(#.\+\|>\s*\)\)\@=" keepend contains=@markdownInline contained'
 
-syn match markdownRule " \{0,3}\* *\* *\*[ *]*$" contained
-syn match markdownRule " \{0,3}- *- *-[ -]*$" contained
+  exe 'syn match markdownRuleL' . s:nesting . ' "' . s:indent_pat . '\* *\* *\*[ *]*$" contained'
+  exe 'syn match markdownRuleL' . s:nesting . ' "' . s:indent_pat . '- *- *-[ -]*$" contained'
 
-syn region markdownBlockquote matchgroup=markdownBlockquoteDelimiter start=" \{0,3}>\%(\s\|$\)" end="$" contains=@markdownInline contained 
+  exe 'syn region markdownBlockquoteL' . s:nesting . ' matchgroup=markdownBlockquoteDelimiter start="' . s:indent_pat . '>\%(\s\|$\)" end="$" contains=@markdownInline contained'
 
-syn region markdownCodeBlock start=" \{4}" end="$" contained
+  exe 'syn region markdownCodeBlockL' . s:nesting . ' start=" \{' . (s:indent_num + &tabstop) . '}" end="$" contained'
 
-syn cluster markdownHeading contains=markdownH1,markdownH2,markdownH3,markdownH4,markdownH5,markdownH6
-syn match markdownH1 "\%(\%(^\s*\n\)\@<=\|\%^\) \{0}\s*\S.*\n=\+\s*$" contains=@markdownInline,markdownHeadingRule contained
-syn match markdownH2 "\%(\%(^\s*\n\)\@<=\|\%^\) \{0}\s*\S.*\n-\+\s*$" contains=@markdownInline,markdownHeadingRule contained
-syn match markdownHeadingRule "^ \{0}[=-]\+\s*$" contained
-syn region markdownH1 matchgroup=markdownHeadingDelimiter start="^ \{0,3}##\@!"      end="$" keepend oneline contains=@markdownInline contained
-syn region markdownH2 matchgroup=markdownHeadingDelimiter start="^ \{0,3}###\@!"     end="$" keepend oneline contains=@markdownInline contained
-syn region markdownH3 matchgroup=markdownHeadingDelimiter start="^ \{0,3}####\@!"    end="$" keepend oneline contains=@markdownInline contained
-syn region markdownH4 matchgroup=markdownHeadingDelimiter start="^ \{0,3}#####\@!"   end="$" keepend oneline contains=@markdownInline contained
-syn region markdownH5 matchgroup=markdownHeadingDelimiter start="^ \{0,3}######\@!"  end="$" keepend oneline contains=@markdownInline contained
-syn region markdownH6 matchgroup=markdownHeadingDelimiter start="^ \{0,3}#######\@!" end="$" keepend oneline contains=@markdownInline contained
+  exe 'syn cluster markdownHeadingL' . s:nesting . ' contains=markdownH1L' . s:nesting . ',markdownH2L' . s:nesting . ',markdownH3L' . s:nesting . ',markdownH4L' . s:nesting . ',markdownH5L' . s:nesting . ',markdownH6L' . s:nesting
+  exe 'syn match markdownH1L' . s:nesting . ' "\%(\%(^\s*\n\)\@<=\|\%^\) \{' . s:indent_num . '}\s*\S.*\n \{' . s:indent_num . '}=\+\s*$" contains=@markdownInline,markdownHeadingRuleL' . s:nesting . ' contained'
+  exe 'syn match markdownH2L' . s:nesting . ' "\%(\%(^\s*\n\)\@<=\|\%^\) \{' . s:indent_num . '}\s*\S.*\n \{' . s:indent_num . '}-\+\s*$" contains=@markdownInline,markdownHeadingRuleL' . s:nesting . ' contained'
+  exe 'syn match markdownHeadingRuleL' . s:nesting . ' "^ \{' . s:indent_num . '}[=-]\+\s*$" contained'
+  exe 'syn region markdownH1L' . s:nesting . ' matchgroup=markdownHeadingDelimiter start="^ \{' . s:indent_num . '}##\@!"      end="$" keepend oneline contains=@markdownInline contained'
+  exe 'syn region markdownH2L' . s:nesting . ' matchgroup=markdownHeadingDelimiter start="^ \{' . s:indent_num . '}###\@!"     end="$" keepend oneline contains=@markdownInline contained'
+  exe 'syn region markdownH3L' . s:nesting . ' matchgroup=markdownHeadingDelimiter start="^ \{' . s:indent_num . '}####\@!"    end="$" keepend oneline contains=@markdownInline contained'
+  exe 'syn region markdownH4L' . s:nesting . ' matchgroup=markdownHeadingDelimiter start="^ \{' . s:indent_num . '}#####\@!"   end="$" keepend oneline contains=@markdownInline contained'
+  exe 'syn region markdownH5L' . s:nesting . ' matchgroup=markdownHeadingDelimiter start="^ \{' . s:indent_num . '}######\@!"  end="$" keepend oneline contains=@markdownInline contained'
+  exe 'syn region markdownH6L' . s:nesting . ' matchgroup=markdownHeadingDelimiter start="^ \{' . s:indent_num . '}#######\@!" end="$" keepend oneline contains=@markdownInline contained'
 
-syn region markdownList start="\%(\%(^\s*\n\)\@<=\|\%^\) \{0,3}\%([*+-]\|\d\+\.\)\s\+\S" end="^\s*\%(\n \{0,3}\S\)\@=\n" contained keepend contains=markdownListItemBlockL1
+  if s:nesting == 0
+    exe 'syn region markdownList start="\%(\%(^\s*\n\)\@<=\|\%^\)' . s:indent_pat . '\%([*+-]\|\d\+\.\)\s\+\S" end="^\s*\%(\n' . s:indent_pat . '\S\)\@=\n" contained keepend contains=markdownListItemBlockL' . s:nesting
+  endif
 
-syn region markdownListItemBlockL1 start="^ \{0,3}\%([*+-]\|\d\+\.\)\s\+\S" end="\n\%( \{0,3}\%([*+-]\|\d\+\.\)\s\+\S\)\@=\|^\s*\%(\n \{0,3}\S\)\@=\n" contained keepend contains=markdownListItemL1,markdownListMarkerL1,markdownListItemBlockL2
-syn match markdownListMarkerL1 "\%(^ \{0,3}\)\@<=\%([*+-]\|\d\+\.\)\%(\s\+\S\)\@=" contained
-syn match markdownListItemL1 "\%(^ \{0,3}\%([*+-]\|\d\+\.\)\s\+\)\@<=\S.*\%(\n\%( *\%([*+-]\|\d\+\.\)\s\+\S\)\@!\s*\S.*\)*$" contained keepend contains=@markdownInline
+  exe 'syn region markdownListItemBlockL' . s:nesting . ' start="^' . s:indent_pat . '\%([*+-]\|\d\+\.\)\s\+\S" end="\n\%(' . s:indent_pat . '\%([*+-]\|\d\+\.\)\s\+\S\)\@=\|^\s*\%(\n' . s:indent_pat . '\S\)\@=\n" contained keepend contains=markdownListItemL' . s:nesting . ',markdownListMarkerL' . s:nesting . ',@markdownBlockL' . (s:nesting + 1)
+  exe 'syn match markdownListMarkerL' . s:nesting . ' "\%(^' . s:indent_pat . '\)\@<=\%([*+-]\|\d\+\.\)\%(\s\+\S\)\@=" contained'
+  exe 'syn match markdownListItemL' . s:nesting . ' "\%(^' . s:indent_pat . '\%([*+-]\|\d\+\.\)\s\+\)\@<=\S.*\%(\n\%( *\%([*+-]\|\d\+\.\)\s\+\S\)\@!\s*\S.*\)*$" contained keepend contains=@markdownInline'
 
-syn region markdownListItemBlockL2 start="^ \{4,7}\%([*+-]\|\d\+\.\)\s\+\S" end="\n\%( \{4,7}\%([*+-]\|\d\+\.\)\s\+\S\)\@=\|^\s*\%(\n \{4,7}\S\)\@=\n" contained keepend contains=markdownListItemL2,markdownListMarkerL2
-syn match markdownListMarkerL2 "\%(^ \{4,7}\)\@<=\%([*+-]\|\d\+\.\)\%(\s\+\S\)\@=" contained
-syn match markdownListItemL2 "\%(^ \{4,7}\%([*+-]\|\d\+\.\)\s\+\)\@<=\S.*\%(\n\%( *\%([*+-]\|\d\+\.\)\s\+\S\)\@!\s*\S.*\)*$" contained keepend contains=@markdownInline
+  exe 'hi def link markdownBlockL' . s:nesting . ' markdownBlock'
+  exe 'hi def link markdownParagraphL' . s:nesting . ' markdownParagraph'
+  exe 'hi def link markdownRuleL' . s:nesting . ' markdownRule'
+  exe 'hi def link markdownBlockquoteL' . s:nesting . ' markdownBlockquote'
+  exe 'hi def link markdownCodeBlockL' . s:nesting . ' markdownCodeBlock'
+  exe 'hi def link markdownHeadingL' . s:nesting . ' markdownHeading'
+  exe 'hi def link markdownHeadingRuleL' . s:nesting . ' markdownHeadingRule'
+  exe 'hi def link markdownH1L' . s:nesting . ' markdownH1'
+  exe 'hi def link markdownH2L' . s:nesting . ' markdownH2'
+  exe 'hi def link markdownH3L' . s:nesting . ' markdownH3'
+  exe 'hi def link markdownH4L' . s:nesting . ' markdownH4'
+  exe 'hi def link markdownH5L' . s:nesting . ' markdownH5'
+  exe 'hi def link markdownH6L' . s:nesting . ' markdownH6'
+  exe 'hi def link markdownListItemBlockL' . s:nesting . ' markdownListItemBlock'
+  exe 'hi def link markdownListMarkerL' . s:nesting . ' markdownListMarker'
+  exe 'hi def link markdownListItemL' . s:nesting . ' markdownListItem'
 
-syn region markdownIdDeclaration matchgroup=markdownLinkDelimiter start="^ \{0,3\}!\=\[" end="\]:" oneline keepend nextgroup=markdownUrl skipwhite
+  let s:nesting -= 1
+endwhile
+
 syn match markdownUrl "\S\+" nextgroup=markdownUrlTitle skipwhite contained
 syn region markdownUrl matchgroup=markdownUrlDelimiter start="<" end=">" oneline keepend nextgroup=markdownUrlTitle skipwhite contained
 syn region markdownUrlTitle matchgroup=markdownUrlTitleDelimiter start=+"+ end=+"+ keepend contained
