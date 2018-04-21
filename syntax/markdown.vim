@@ -144,6 +144,14 @@ if get(b:, 'markdown_yaml_head', get(g:, 'markdown_yaml_head', main_syntax ==# '
   syn region markdownYamlHead start="\%^---$" end="^\%(---\|\.\.\.\)\s*$" keepend contains=@markdownYamlTop,@Spell
 endif
 
+if g:markdown_fenced_tex
+  syn include syntax/tex.vim
+  syn region markdownHighlighttex matchgroup=markdownCodeDelimiter start="\\\\(\ze[^ \n]" end="[^ \n]\zs\\\\)" keepend contains=@texMathZoneGroup
+  syn region markdownHighlighttex matchgroup=markdownCodeDelimiter start="\\\\\[" end="\\\\\]" keepend contains=@texMathZoneGroup
+  syn region markdownHighlighttex matchgroup=markdownCodeDelimiter start="\$\ze[^ \n]" end="[^ \n]\zs\$" keepend contains=@texMathZoneGroup
+  syn region markdownHighlighttex matchgroup=markdownCodeDelimiter start="\$\$" end="\$\$" keepend contains=@texMathZoneGroup
+endif
+
 syn match markdownEscape "\\[][\\`*_{}()<>#+.!-]"
 syn match markdownError "\w\@<=_\w\@="
 
