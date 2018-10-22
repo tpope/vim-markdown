@@ -11,6 +11,8 @@ installing from this repository, add the following to your vimrc:
 
     autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 
+## Configuration
+
 To enable fenced code block syntax highlighting in your markdown
 documents, add the following to your `.vimrc`:
 
