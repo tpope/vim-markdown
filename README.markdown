@@ -20,13 +20,13 @@ To disable markdown syntax concealing add the following to your vimrc:
 
     let g:markdown_syntax_conceal = 0
 
-Syntax highlight is synchronized in 50 lines. It may cause collapsed
-highlighting at large fenced code block.
-In the case, please set larger value in your vimrc:
+Syntax highlight is synchronized in 50 lines. This may cause collapsed
+highlighting on large fenced code blocks.
+In that case, set `g:markdown_minlines` to a larger value in your vimrc:
 
     let g:markdown_minlines = 100
 
-Note that setting too large value may cause bad performance on highlighting.
+**Note**: Setting `g:markdown_minlines` to a value that is too large value may cause poor highlighting performance.
 
 To enable folding, add the following to your vimrc:
 
