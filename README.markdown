@@ -28,6 +28,10 @@ In the case, please set larger value in your vimrc:
 
 Note that setting too large value may cause bad performance on highlighting.
 
+To enable folding, add the following to your vimrc:
+
+    let g:markdown_folding = 1
+
 ## License
 
 Copyright © Tim Pope.  Distributed under the same terms as Vim itself.
