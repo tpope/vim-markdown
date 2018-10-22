@@ -12,25 +12,25 @@ installing from this repository, add the following to your vimrc:
     autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 
 To enable fenced code block syntax highlighting in your markdown
-documents add the following to your vimrc:
+documents, add the following to your `.vimrc`:
 
     let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
 
 **Note**: The fenced language names must be valid names of syntax files in vim's `syntax` folder. For example: `syntax/ruby.vim`.
 
-To disable markdown syntax concealing add the following to your vimrc:
+To disable markdown syntax concealing, add the following to your `.vimrc`:
 
     let g:markdown_syntax_conceal = 0
 
-Syntax highlight is synchronized in 50 lines. This may cause collapsed
+Syntax highlighting is synchronized in 50 lines. This may cause collapsed
 highlighting on large fenced code blocks.
-In that case, set `g:markdown_minlines` to a larger value in your vimrc:
+In that case, set `g:markdown_minlines` to a larger value in your `.vimrc`:
 
     let g:markdown_minlines = 100
 
 **Note**: Setting `g:markdown_minlines` to a value that is too large value may cause poor highlighting performance.
 
-To enable folding, add the following to your vimrc:
+To enable folding, add the following to your `.vimrc`:
 
     let g:markdown_folding = 1
 
