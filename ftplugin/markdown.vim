@@ -23,21 +23,25 @@ function! MarkdownFold()
   let line = getline(v:lnum)
 
   " Regular headers
-  if line =~# '^#\+ '
+  if line =~# '^#\+ ' && s:NotCodeBlock(v:lnum)
     return ">" . match(line, ' ')
   endif
 
   " Setext style headings
   let nextline = getline(v:lnum + 1)
-  if (line =~ '^.\+$') && (nextline =~ '^=\+$')
+  if (line =~ '^.\+$') && (nextline =~ '^=\+$') && s:NotCodeBlock(v:lnum + 1)
     return ">1"
   endif
 
-  if (line =~ '^.\+$') && (nextline =~ '^-\+$')
+  if (line =~ '^.\+$') && (nextline =~ '^-\+$') && s:NotCodeBlock(v:lnum + 1)
     return ">2"
   endif
 
   return "="
+endfunction
+
+function! s:NotCodeBlock(lnum)
+  return synIDattr(synID(v:lnum, 1, 1), 'name') !=# 'markdownCode'
 endfunction
 
 function! MarkdownFoldText()
