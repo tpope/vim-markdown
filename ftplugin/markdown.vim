@@ -23,9 +23,8 @@ function! MarkdownFold()
   let line = getline(v:lnum)
 
   " Regular headers
-  let depth = match(line, '\(^#\+\)\@<=\( .*$\)\@=')
-  if depth > 0
-    return ">" . depth
+  if (match(line, '^#\+ .*$') == 0)
+    return ">" . match(line, ' ')
   endif
 
   " Setext style headings
