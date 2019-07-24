@@ -23,7 +23,7 @@ function! MarkdownFold()
   let line = getline(v:lnum)
 
   " Regular headers
-  if line =~# '^#\+ ')
+  if line =~# '^#\+ '
     return ">" . match(line, ' ')
   endif
 
