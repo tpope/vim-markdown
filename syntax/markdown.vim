@@ -39,13 +39,13 @@ endif
 execute 'syn sync minlines=' . g:markdown_minlines
 syn case ignore
 
-syn match markdownValid '[<>]\c[a-z/$!]\@!'
-syn match markdownValid '&\%(#\=\w*;\)\@!'
+syn match markdownValid '[<>]\c[a-z/$!]\@!' transparent contains=NONE
+syn match markdownValid '&\%(#\=\w*;\)\@!' transparent contains=NONE
 
 syn match markdownLineStart "^[<@]\@!" nextgroup=@markdownBlock,htmlSpecialChar
 
 syn cluster markdownBlock contains=markdownH1,markdownH2,markdownH3,markdownH4,markdownH5,markdownH6,markdownBlockquote,markdownListMarker,markdownOrderedListMarker,markdownCodeBlock,markdownRule
-syn cluster markdownInline contains=markdownLineBreak,markdownLinkText,markdownItalic,markdownBold,markdownCode,markdownEscape,@htmlTop,markdownError
+syn cluster markdownInline contains=markdownLineBreak,markdownLinkText,markdownItalic,markdownBold,markdownCode,markdownEscape,@htmlTop,markdownError,markdownValid
 
 syn match markdownH1 "^.\+\n=\+$" contained contains=@markdownInline,markdownHeadingRule,markdownAutomaticLink
 syn match markdownH2 "^.\+\n-\+$" contained contains=@markdownInline,markdownHeadingRule,markdownAutomaticLink
