@@ -15,6 +15,9 @@ endif
 runtime! syntax/html.vim
 unlet! b:current_syntax
 
+if has('folding')
+  let s:foldmethod = &l:foldmethod
+endif
 if !exists('g:markdown_fenced_languages')
   let g:markdown_fenced_languages = []
 endif
@@ -32,6 +35,9 @@ for s:type in map(copy(g:markdown_fenced_languages),'matchstr(v:val,"[^=]*$")')
 endfor
 unlet! s:type
 unlet! s:done_include
+if exists('s:foldmethod') && s:foldmethod !=# &l:foldmethod
+  let &l:foldmethod = s:foldmethod
+endif
 
 if !exists('g:markdown_minlines')
   let g:markdown_minlines = 50
