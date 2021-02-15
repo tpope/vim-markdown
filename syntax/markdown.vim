@@ -14,6 +14,7 @@ endif
 
 if has('folding')
   let s:foldmethod = &l:foldmethod
+  let s:foldtext = &l:foldtext
 endif
 
 runtime! syntax/html.vim
@@ -40,6 +41,10 @@ unlet! s:done_include
 if exists('s:foldmethod') && s:foldmethod !=# &l:foldmethod
   let &l:foldmethod = s:foldmethod
   unlet s:foldmethod
+endif
+if exists('s:foldtext') && s:foldtext !=# &l:foldtext
+  let &l:foldtext = s:foldtext
+  unlet s:foldtext
 endif
 
 if !exists('g:markdown_minlines')
