@@ -72,7 +72,7 @@ function! MarkdownFoldText() abort
   return hash_indent.' '.title.' '.linecount
 endfunction
 
-if has("folding") && exists("g:markdown_folding")
+if has("folding") && get(g:, "markdown_folding", 0)
   setlocal foldexpr=MarkdownFold()
   setlocal foldmethod=expr
   setlocal foldtext=MarkdownFoldText()
