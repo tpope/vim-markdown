@@ -173,6 +173,8 @@ hi def link markdownBoldDelimiter         markdownBold
 hi def link markdownBoldItalic            htmlBoldItalic
 hi def link markdownBoldItalicDelimiter   markdownBoldItalic
 hi def link markdownCodeDelimiter         Delimiter
+hi def link markdownCode                  String
+hi def link markdownCodeBlock             String
 
 hi def link markdownEscape                Special
 hi def link markdownError                 Error
