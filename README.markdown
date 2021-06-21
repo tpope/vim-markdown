@@ -1,25 +1,43 @@
 # Vim Markdown runtime files
 
 This is the development version of Vim's included syntax highlighting and
-filetype plugins for Markdown.  Generally you don't need to install these if
+filetype plugins for Markdown. Generally you don't need to install these if
 you are running a recent version of Vim.
 
-If you want to enable fenced code block syntax highlighting in your markdown
-documents you can enable it in your `.vimrc` like so:
+## Configuration
+
+### Fenced code block highlighting
+
+To enable fenced code block syntax highlighting in your markdown
+documents, add the following to your `.vimrc`:
 
     let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
 
-To disable markdown syntax concealing add the following to your vimrc:
+**Note**: The fenced language names must be valid names of syntax files in vim's
+`syntax` folder. For example: `syntax/ruby.vim`.
+
+### Syntax concealment
+
+To disable markdown syntax concealing, add the following to your `.vimrc`:
 
     let g:markdown_syntax_conceal = 0
 
-Syntax highlight is synchronized in 50 lines. It may cause collapsed
-highlighting at large fenced code block.
-In the case, please set larger value in your vimrc:
+### Highlighting synchronization
+
+Syntax highlighting is synchronized in 50 lines. This may cause collapsed
+highlighting on large fenced code blocks.
+In that case, set `g:markdown_minlines` to a larger value in your `.vimrc`:
 
     let g:markdown_minlines = 100
 
-Note that setting too large value may cause bad performance on highlighting.
+**Note**: Setting `g:markdown_minlines` to a value that is too large value may
+cause poor highlighting performance.
+
+### Folding
+
+To enable folding, add the following to your `.vimrc`:
+
+    let g:markdown_folding = 1
 
 ## License
 
