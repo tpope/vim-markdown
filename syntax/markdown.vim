@@ -82,8 +82,9 @@ syn region markdownCodeBlock start="^\n\( \{4,}\|\t\)" end="^\ze \{,3}\S.*$" kee
 syn match markdownListMarker "\%(\t\| \{0,4\}\)[-*+]\%(\s\+\S\)\@=" contained
 syn match markdownOrderedListMarker "\%(\t\| \{0,4}\)\<\d\+\.\%(\s\+\S\)\@=" contained
 
-syn match markdownRule "\* *\* *\*[ *]*$" contained
-syn match markdownRule "- *- *-[ -]*$" contained
+syn match markdownRule "^ \{0,3\}\* *\* *\*[ *]*$" contained
+syn match markdownRule "^ \{0,3\}- *- *-[ -]*$" contained
+syn match markdownRule "^ \{0,3\}_ *_ *_[ _]*$" contained
 
 syn match markdownLineBreak " \{2,\}$"
 
@@ -103,12 +104,12 @@ let s:concealends = ''
 if has('conceal') && get(g:, 'markdown_syntax_conceal', 1) == 1
   let s:concealends = ' concealends'
 endif
-exe 'syn region markdownItalic matchgroup=markdownItalicDelimiter start="\S\@<=\*\|\*\S\@=" end="\S\@<=\*\|\*\S\@=" skip="\\\*" contains=markdownLineStart,@Spell' . s:concealends
-exe 'syn region markdownItalic matchgroup=markdownItalicDelimiter start="\w\@<!_\S\@=" end="\S\@<=_\w\@!" skip="\\_" contains=markdownLineStart,@Spell' . s:concealends
-exe 'syn region markdownBold matchgroup=markdownBoldDelimiter start="\S\@<=\*\*\|\*\*\S\@=" end="\S\@<=\*\*\|\*\*\S\@=" skip="\\\*" contains=markdownLineStart,markdownItalic,@Spell' . s:concealends
-exe 'syn region markdownBold matchgroup=markdownBoldDelimiter start="\w\@<!__\S\@=" end="\S\@<=__\w\@!" skip="\\_" contains=markdownLineStart,markdownItalic,@Spell' . s:concealends
-exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\S\@<=\*\*\*\|\*\*\*\S\@=" end="\S\@<=\*\*\*\|\*\*\*\S\@=" skip="\\\*" contains=markdownLineStart,@Spell' . s:concealends
-exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\w\@<!___\S\@=" end="\S\@<=___\w\@!" skip="\\_" contains=markdownLineStart,@Spell' . s:concealends
+exe 'syn region markdownItalic matchgroup=markdownItalicDelimiter start="\%(\S\&[^\*]\)\@<=\*\|\*\%(\S\&[^\*]\)\@=" end="\S\@<=\*\|\*\S\@=" skip="\\\*" contains=markdownLineStart,@Spell' . s:concealends
+exe 'syn region markdownItalic matchgroup=markdownItalicDelimiter start="\w\@<!_\%(\S\&[^_]\)\@=" end="\S\@<=_\w\@!" skip="\\_" contains=markdownLineStart,@Spell' . s:concealends
+exe 'syn region markdownBold matchgroup=markdownBoldDelimiter start="\%(\S\&[^\*]\)\@<=\*\*\|\*\*\%(\S\&[^\*]\)\@=" end="\S\@<=\*\*\|\*\*\S\@=" skip="\\\*" contains=markdownLineStart,markdownItalic,@Spell' . s:concealends
+exe 'syn region markdownBold matchgroup=markdownBoldDelimiter start="\w\@<!__\%(\S\&[^_]\)\@=" end="\S\@<=__\w\@!" skip="\\_" contains=markdownLineStart,markdownItalic,@Spell' . s:concealends
+exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\%(\S\&[^\*]\)\@<=\*\*\*\|\*\*\*\%(\S\&[^\*]\)\@=" end="\S\@<=\*\*\*\|\*\*\*\S\@=" skip="\\\*" contains=markdownLineStart,@Spell' . s:concealends
+exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\w\@<!___\%(\S\&[^_]\)\@=" end="\S\@<=___\w\@!" skip="\\_" contains=markdownLineStart,@Spell' . s:concealends
 
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`" end="`" keepend contains=markdownLineStart
 syn region markdownCode matchgroup=markdownCodeDelimiter start="`` \=" end=" \=``" keepend contains=markdownLineStart
