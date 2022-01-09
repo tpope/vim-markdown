@@ -39,6 +39,7 @@ endfor
 unlet! s:type
 unlet! s:done_include
 
+syn spell toplevel
 if exists('s:foldmethod') && s:foldmethod !=# &l:foldmethod
   let &l:foldmethod = s:foldmethod
   unlet s:foldmethod
