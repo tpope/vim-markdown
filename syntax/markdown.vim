@@ -31,6 +31,7 @@ for s:type in map(copy(g:markdown_fenced_languages),'matchstr(v:val,"[^=]*$")')
   if s:type =~ '\.'
     let b:{matchstr(s:type,'[^.]*')}_subtype = matchstr(s:type,'\.\zs.*')
   endif
+  syn case match
   exe 'syn include @markdownHighlight'.substitute(s:type,'\.','','g').' syntax/'.matchstr(s:type,'[^.]*').'.vim'
   unlet! b:current_syntax
   let s:done_include[matchstr(s:type,'[^.]*')] = 1
