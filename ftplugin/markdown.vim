@@ -76,7 +76,7 @@ if has("folding") && get(g:, "markdown_folding", 0)
   setlocal foldexpr=MarkdownFold()
   setlocal foldmethod=expr
   setlocal foldtext=MarkdownFoldText()
-  let b:undo_ftplugin .= " foldexpr< foldmethod< foldtext<"
+  let b:undo_ftplugin .= "|setl foldexpr< foldmethod< foldtext<"
 endif
 
 " vim:set sw=2:
