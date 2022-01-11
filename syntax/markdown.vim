@@ -16,6 +16,7 @@ if has('folding')
   let s:foldmethod = &l:foldmethod
   let s:foldtext = &l:foldtext
 endif
+let s:iskeyword = &l:iskeyword
 
 runtime! syntax/html.vim
 unlet! b:current_syntax
@@ -48,6 +49,10 @@ if exists('s:foldtext') && s:foldtext !=# &l:foldtext
   let &l:foldtext = s:foldtext
   unlet s:foldtext
 endif
+if s:iskeyword !=# &l:iskeyword
+  let &l:iskeyword = s:iskeyword
+endif
+unlet s:iskeyword
 
 if !exists('g:markdown_minlines')
   let g:markdown_minlines = 50
