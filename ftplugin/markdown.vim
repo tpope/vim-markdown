@@ -12,11 +12,12 @@ runtime! ftplugin/html.vim ftplugin/html_*.vim ftplugin/html/*.vim
 setlocal comments=fb:*,fb:-,fb:+,n:> commentstring=<!--%s-->
 setlocal formatoptions+=tcqln formatoptions-=r formatoptions-=o
 setlocal formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\|^\\s*[-*+]\\s\\+\\\|^\\[^\\ze[^\\]]\\+\\]:\\&^.\\{4\\}
+setlocal indentexpr=-1
 
 if exists('b:undo_ftplugin')
-  let b:undo_ftplugin .= "|setl cms< com< fo< flp<"
+  let b:undo_ftplugin .= "|setl cms< com< fo< flp< inde<"
 else
-  let b:undo_ftplugin = "setl cms< com< fo< flp<"
+  let b:undo_ftplugin = "setl cms< com< fo< flp< inde<"
 endif
 
 if !exists("g:no_plugin_maps") && !exists("g:no_markdown_maps")
