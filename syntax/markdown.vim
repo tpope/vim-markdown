@@ -138,6 +138,12 @@ endfor
 unlet! s:type
 unlet! s:done_include
 
+if get(b:, 'markdown_yaml_head', get(g:, 'markdown_yaml_head', main_syntax ==# 'markdown'))
+  syn include @markdownYamlTop syntax/yaml.vim
+  unlet! b:current_syntax
+  syn region markdownYamlHead start="\%^---$" end="^\%(---\|\.\.\.\)\s*$" keepend contains=@markdownYamlTop,@Spell
+endif
+
 syn match markdownEscape "\\[][\\`*_{}()<>#+.!-]"
 syn match markdownError "\w\@<=_\w\@="
 
