@@ -14,9 +14,13 @@ setlocal formatoptions+=tcqln formatoptions-=r formatoptions-=o
 setlocal formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\|^\\s*[-*+]\\s\\+\\\|^\\[^\\ze[^\\]]\\+\\]:\\&^.\\{4\\}
 
 if exists('b:undo_ftplugin')
-  let b:undo_ftplugin .= "|setl cms< com< fo< flp<"
+  let b:undo_ftplugin .= "|setl cms< com< fo< flp< et< ts< sts< sw<"
 else
-  let b:undo_ftplugin = "setl cms< com< fo< flp<"
+  let b:undo_ftplugin = "setl cms< com< fo< flp< et< ts< sts< sw<"
+endif
+
+if get(g:, 'markdown_recommended_style', 1)
+  setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4
 endif
 
 if !exists("g:no_plugin_maps") && !exists("g:no_markdown_maps")
