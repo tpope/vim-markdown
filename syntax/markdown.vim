@@ -2,7 +2,7 @@
 " Language:     Markdown
 " Maintainer:   Tim Pope <https://github.com/tpope/vim-markdown>
 " Filenames:    *.markdown
-" Last Change:  2020 Jan 14
+" Last Change:  2022 Oct 13
 
 if exists("b:current_syntax")
   finish

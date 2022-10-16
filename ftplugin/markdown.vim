@@ -1,13 +1,16 @@
 " Vim filetype plugin
 " Language:     Markdown
 " Maintainer:   Tim Pope <https://github.com/tpope/vim-markdown>
-" Last Change:  2019 Dec 05
+" Last Change:  2022 Oct 13
 
 if exists("b:did_ftplugin")
   finish
 endif
 
 runtime! ftplugin/html.vim ftplugin/html_*.vim ftplugin/html/*.vim
+
+let s:keepcpo= &cpo
+set cpo&vim
 
 setlocal comments=fb:*,fb:-,fb:+,n:> commentstring=<!--%s-->
 setlocal formatoptions+=tcqln formatoptions-=r formatoptions-=o
@@ -82,5 +85,8 @@ if has("folding") && get(g:, "markdown_folding", 0)
   setlocal foldtext=MarkdownFoldText()
   let b:undo_ftplugin .= "|setl foldexpr< foldmethod< foldtext<"
 endif
+
+let &cpo = s:keepcpo
+unlet s:keepcpo
 
 " vim:set sw=2:
