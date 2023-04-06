@@ -85,6 +85,10 @@ syn match markdownBlockquote ">\%(\s\|$\)" contained nextgroup=@markdownBlock
 
 syn region markdownCodeBlock start="^\n\( \{4,}\|\t\)" end="^\ze \{,3}\S.*$" keepend
 
+syn include @yamlTop syntax/yaml.vim
+syntax match YAMLFrontMatter /\%^---\_.\{-}\.\.\.$/ contains=@yamlTop
+unlet! b:current_syntax
+
 " TODO: real nesting
 syn match markdownListMarker "\%(\t\| \{0,4\}\)[-*+]\%(\s\+\S\)\@=" contained
 syn match markdownOrderedListMarker "\%(\t\| \{0,4}\)\<\d\+\.\%(\s\+\S\)\@=" contained
