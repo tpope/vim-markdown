@@ -106,14 +106,24 @@ syn region markdownLink matchgroup=markdownLinkDelimiter start="(" end=")" conta
 syn region markdownId matchgroup=markdownIdDelimiter start="\[" end="\]" keepend contained
 syn region markdownAutomaticLink matchgroup=markdownUrlDelimiter start="<\%(\w\+:\|[[:alnum:]_+-]\+@\)\@=" end=">" keepend oneline
 
+let s:conceal = ''
 let s:concealends = ''
 if has('conceal') && get(g:, 'markdown_syntax_conceal', 1) == 1
+  let s:conceal = ' conceal'
   let s:concealends = ' concealends'
 endif
-exe 'syn region markdownItalic matchgroup=markdownItalicDelimiter start="\*\S\@=" end="\S\@<=\*\|^$" skip="\\\*" contains=markdownLineStart,@Spell' . s:concealends
-exe 'syn region markdownItalic matchgroup=markdownItalicDelimiter start="\w\@<!_\S\@=" end="\S\@<=_\w\@!\|^$" skip="\\_" contains=markdownLineStart,@Spell' . s:concealends
-exe 'syn region markdownBold matchgroup=markdownBoldDelimiter start="\*\*\S\@=" end="\S\@<=\*\*\|^$" skip="\\\*" contains=markdownLineStart,markdownItalic,@Spell' . s:concealends
-exe 'syn region markdownBold matchgroup=markdownBoldDelimiter start="\w\@<!__\S\@=" end="\S\@<=__\w\@!\|^$" skip="\\_" contains=markdownLineStart,markdownItalic,@Spell' . s:concealends
+exe 'syn match markdownItalicDelimiterStart "\*\ze\S\(\([^\n]\|\n[^\n]\)\{-}\)\S\*"' s:conceal
+exe 'syn match markdownItalicDelimiterEnd "\(\*\S\(\([^\n]\|\n[^\n]\)\{-}\)\S\)\@<=\*"' s:conceal
+syn match markdownItalic "\*\S\(\([^\n]\|\n[^\n]\)\{-}\)\S\*" contains=markdownItalicDelimiterStart,markdownItalicDelimiterEnd
+exe 'syn match markdownItalicDelimiterStart "_\ze\S\(\([^\n]\|\n[^\n]\)\{-}\)\S_"' s:conceal
+exe 'syn match markdownItalicDelimiterEnd "\(_\S\(\([^\n]\|\n[^\n]\)\{-}\)\S\)\@<=_"' s:conceal
+syn match markdownItalic "_\S\(\([^\n]\|\n[^\n]\)\{-}\)\S_" contains=markdownItalicDelimiterStart,markdownItalicDelimiterEnd
+exe 'syn match markdownBoldDelimiterStart "\*\*\ze\S\(\([^\n]\|\n[^\n]\)\{-}\)\S\*\*"' s:conceal
+exe 'syn match markdownBoldDelimiterEnd "\(\*\*\S\(\([^\n]\|\n[^\n]\)\{-}\)\S\)\@<=\*\*"' s:conceal
+syn match markdownBold "\*\*\S\(\([^\n]\|\n[^\n]\)\{-}\)\S\*\*" contains=markdownBoldDelimiterStart,markdownBoldDelimiterEnd
+exe 'syn match markdownBoldDelimiterStart "__\ze\S\(\([^\n]\|\n[^\n]\)\{-}\)\S__"' s:conceal
+exe 'syn match markdownBoldDelimiterEnd "\(__\S\(\([^\n]\|\n[^\n]\)\{-}\)\S\)\@<=__"' s:conceal
+syn match markdownBold "__\S\(\([^\n]\|\n[^\n]\)\{-}\)\S__" contains=markdownBoldDelimiterStart,markdownBoldDelimiterEnd
 exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\*\*\*\S\@=" end="\S\@<=\*\*\*\|^$" skip="\\\*" contains=markdownLineStart,@Spell' . s:concealends
 exe 'syn region markdownBoldItalic matchgroup=markdownBoldItalicDelimiter start="\w\@<!___\S\@=" end="\S\@<=___\w\@!\|^$" skip="\\_" contains=markdownLineStart,@Spell' . s:concealends
 exe 'syn region markdownStrike matchgroup=markdownStrikeDelimiter start="\~\~\S\@=" end="\S\@<=\~\~\|^$" contains=markdownLineStart,@Spell' . s:concealends
@@ -188,6 +198,7 @@ hi def link markdownBoldItalicDelimiter   markdownBoldItalic
 hi def link markdownStrike                htmlStrike
 hi def link markdownStrikeDelimiter       markdownStrike
 hi def link markdownCodeDelimiter         Delimiter
+hi def link markdownCode                  Delimiter
 
 hi def link markdownEscape                Special
 hi def link markdownError                 Error
