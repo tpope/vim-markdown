@@ -12,7 +12,7 @@ runtime! ftplugin/html.vim ftplugin/html_*.vim ftplugin/html/*.vim
 let s:keepcpo= &cpo
 set cpo&vim
 
-setlocal comments=fb:*,fb:-,fb:+,n:> commentstring=<!--%s-->
+setlocal comments=fb:*,fb:-,fb:+,n:> commentstring=<!--\ %s\ -->
 setlocal formatoptions+=tcqln formatoptions-=r formatoptions-=o
 setlocal formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\|^\\s*[-*+]\\s\\+\\\|^\\[^\\ze[^\\]]\\+\\]:\\&^.\\{4\\}
 
