@@ -94,7 +94,6 @@ syn match markdownRule "- *- *-[ -]*$" contained
 
 syn match markdownLineBreak " \{2,\}$"
 
-syn region markdownIdDeclaration matchgroup=markdownLinkDelimiter start="^ \{0,3\}!\=\[" end="\]:" oneline keepend nextgroup=markdownUrl skipwhite
 syn match markdownUrl "\S\+" nextgroup=markdownUrlTitle skipwhite contained
 syn region markdownUrl matchgroup=markdownUrlDelimiter start="<" end=">" oneline keepend nextgroup=markdownUrlTitle skipwhite contained
 syn region markdownUrlTitle matchgroup=markdownUrlTitleDelimiter start=+"+ end=+"+ keepend contained
@@ -105,6 +104,8 @@ syn region markdownLinkText matchgroup=markdownLinkTextDelimiter start="!\=\[\%(
 syn region markdownLink matchgroup=markdownLinkDelimiter start="(" end=")" contains=markdownUrl keepend contained
 syn region markdownId matchgroup=markdownIdDelimiter start="\[" end="\]" keepend contained
 syn region markdownAutomaticLink matchgroup=markdownUrlDelimiter start="<\%(\w\+:\|[[:alnum:]_+-]\+@\)\@=" end=">" keepend oneline
+syn region markdownShortcutLink matchgroup=markdownLinkTextDelimiter start="!\=\[\%(\_[^][]*]\%( \=[[(]\)\@!\)\@=" end="\]" contains=@markdownInline,markdownLineStart
+syn region markdownIdDeclaration matchgroup=markdownLinkDelimiter start="^ \{0,3\}!\=\[" end="\]:" oneline keepend nextgroup=markdownUrl skipwhite
 
 let s:concealends = ''
 if has('conceal') && get(g:, 'markdown_syntax_conceal', 1) == 1
@@ -173,6 +174,7 @@ hi def link markdownLinkText              htmlLink
 hi def link markdownIdDeclaration         Typedef
 hi def link markdownId                    Type
 hi def link markdownAutomaticLink         markdownUrl
+hi def link markdownShortcutLink          markdownId
 hi def link markdownUrl                   Float
 hi def link markdownUrlTitle              String
 hi def link markdownIdDelimiter           markdownLinkDelimiter
