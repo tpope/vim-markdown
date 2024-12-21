@@ -131,8 +131,8 @@ for s:type in g:markdown_fenced_languages
   if has_key(s:done_include, matchstr(s:type,'[^.]*'))
     continue
   endif
-  exe 'syn region markdownHighlight_'.substitute(matchstr(s:type,'[^=]*$'),'\..*','','').' matchgroup=markdownCodeDelimiter start="^\s*\z(`\{3,\}\)\s*\%({.\{-}\.\)\='.matchstr(s:type,'[^=]*').'}\=\S\@!.*$" end="^\s*\z1\ze\s*$" keepend contains=@markdownHighlight_'.tr(matchstr(s:type,'[^=]*$'),'.','_') . s:concealends
-  exe 'syn region markdownHighlight_'.substitute(matchstr(s:type,'[^=]*$'),'\..*','','').' matchgroup=markdownCodeDelimiter start="^\s*\z(\~\{3,\}\)\s*\%({.\{-}\.\)\='.matchstr(s:type,'[^=]*').'}\=\S\@!.*$" end="^\s*\z1\ze\s*$" keepend contains=@markdownHighlight_'.tr(matchstr(s:type,'[^=]*$'),'.','_') . s:concealends
+  exe 'syn region markdownHighlight_'.substitute(matchstr(s:type,'[^=]*$'),'\..*','','').' matchgroup=markdownCodeDelimiter start="^\s*\z(`\{3,\}\)\s*\%({.\{-}\.\)\='.matchstr(s:type,'[^=]*').'}\=[^[:space:]:]\@!.*$" end="^\s*\z1\ze\s*$" keepend contains=@markdownHighlight_'.tr(matchstr(s:type,'[^=]*$'),'.','_') . s:concealends
+  exe 'syn region markdownHighlight_'.substitute(matchstr(s:type,'[^=]*$'),'\..*','','').' matchgroup=markdownCodeDelimiter start="^\s*\z(\~\{3,\}\)\s*\%({.\{-}\.\)\='.matchstr(s:type,'[^=]*').'}\=[^[:space:]:]\@!.*$" end="^\s*\z1\ze\s*$" keepend contains=@markdownHighlight_'.tr(matchstr(s:type,'[^=]*$'),'.','_') . s:concealends
   let s:done_include[matchstr(s:type,'[^.]*')] = 1
 endfor
 unlet! s:type
