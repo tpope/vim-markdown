@@ -145,6 +145,7 @@ if get(b:, 'markdown_yaml_head', get(g:, 'markdown_yaml_head', main_syntax ==# '
 endif
 
 syn match markdownEscape "\\[][\\`*_{}()<>#+.!-]"
+syn match markdownImplicitBreak "\s*\ \ $" containedin=ALL
 syn match markdownError "\w\@<=_\w\@="
 
 hi def link markdownH1                    htmlH1
@@ -190,6 +191,7 @@ hi def link markdownStrikeDelimiter       markdownStrike
 hi def link markdownCodeDelimiter         Delimiter
 
 hi def link markdownEscape                Special
+hi def link markdownImplicitBreak         Error
 hi def link markdownError                 Error
 
 let b:current_syntax = "markdown"
