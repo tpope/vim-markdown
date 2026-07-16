@@ -35,7 +35,7 @@ if !exists("g:no_plugin_maps") && !exists("g:no_markdown_maps")
 endif
 
 function! s:NotCodeBlock(lnum) abort
-  return synIDattr(synID(a:lnum, 1, 1), 'name') !=# 'markdownCodeBlock'
+  return map(synstack(a:lnum, 1), 'synIDattr(v:val, "name")')->join() !~# 'markdownCodeBlock\|markdownHighlight'
 endfunction
 
 function! MarkdownFold() abort
