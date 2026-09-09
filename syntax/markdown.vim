@@ -145,7 +145,7 @@ if get(b:, 'markdown_yaml_head', get(g:, 'markdown_yaml_head', main_syntax ==# '
 endif
 
 syn match markdownEscape "\\[][\\`*_{}()<>#+.!-]"
-syn match markdownError "\w\@<=_\w\@="
+syn match markdownError "\w\@1<=_\ze\w"
 
 hi def link markdownH1                    htmlH1
 hi def link markdownH2                    htmlH2
